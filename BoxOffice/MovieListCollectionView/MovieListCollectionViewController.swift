@@ -11,10 +11,10 @@ import UIKit
 class MovieListCollectionViewController: UIViewController {
 
     private let movieService: MovieServiceProvider = .shared
-    private let cellIdentifier = "collectionViewCell"
+//    private let cellIdentifier = "MovieListCollectionViewCell"
     var arrayMovies: [Movies] = []
 
-    @IBOutlet private weak var collectionView: UICollectionView?
+    @IBOutlet private weak var movieListCollectionView: UICollectionView?
 
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
         self.showAlertController(style: UIAlertController.Style.actionSheet)
@@ -24,8 +24,8 @@ class MovieListCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.collectionView?.delegate = self
-        self.collectionView?.dataSource = self
+        self.movieListCollectionView?.delegate = self
+        self.movieListCollectionView?.dataSource = self
 
         self.navigationController?.navigationBar.barTintColor = .systemIndigo
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -33,12 +33,12 @@ class MovieListCollectionViewController: UIViewController {
 
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 100, height: 100)
-        self.collectionView?.collectionViewLayout = layout
+        self.movieListCollectionView?.collectionViewLayout = layout
         
         self.movieService.requestMovieList(movieSortMode: .reservationRate) { movies in
             DispatchQueue.main.async {
                 self.arrayMovies = movies
-                self.collectionView?.reloadData()
+                self.movieListCollectionView?.reloadData()
             }
         }
     }
@@ -46,14 +46,14 @@ class MovieListCollectionViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         DispatchQueue.main.async {
-            self.collectionView?.reloadData()
+            self.movieListCollectionView?.reloadData()
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.async {
-            self.collectionView?.reloadData()
+            self.movieListCollectionView?.reloadData()
         }
     }
     
@@ -87,7 +87,7 @@ class MovieListCollectionViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.navigationItem.title = movieSortMode.title
                     self.arrayMovies = movies
-                    self.collectionView?.reloadData()
+                    self.movieListCollectionView?.reloadData()
                 }
             }
         }
@@ -119,9 +119,7 @@ extension MovieListCollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell:MovieListCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? MovieListCollectionViewCell else {
-            return UICollectionViewCell()
-        }
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as MovieListCollectionViewCell
         
         let model: Movies = self.arrayMovies[indexPath.row]
 
