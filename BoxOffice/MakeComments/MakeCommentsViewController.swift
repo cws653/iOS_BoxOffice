@@ -16,7 +16,7 @@ class MakeCommentsViewController: UIViewController {
 
     @IBOutlet weak var labelOfTitle: UILabel?
     @IBOutlet weak var imageOfGrade: UIImageView?
-    @IBOutlet weak var contentsTextView: UITextView!
+    @IBOutlet weak var contentsTextView: UITextView?
     @IBOutlet weak var gradeOfLabel: UILabel?
     @IBOutlet weak var sliderOfGrade: UISlider?
     @IBOutlet weak var userIdTextField: UITextField?
@@ -42,13 +42,13 @@ class MakeCommentsViewController: UIViewController {
         let backButton = UIBarButtonItem.init(title: "취소", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
 
-        self.contentsTextView.layer.borderWidth = 2.0
-        self.contentsTextView.layer.borderColor = UIColor.systemOrange.cgColor
-        self.contentsTextView.text = "내용을 입력해주세요."
-        self.contentsTextView.textColor = UIColor.systemGray4
+        self.contentsTextView?.layer.borderWidth = 2.0
+        self.contentsTextView?.layer.borderColor = UIColor.systemOrange.cgColor
+        self.contentsTextView?.text = "내용을 입력해주세요."
+        self.contentsTextView?.textColor = UIColor.systemGray4
         
-        let startPosition = contentsTextView.beginningOfDocument
-        contentsTextView.selectedTextRange = contentsTextView.textRange(from: startPosition, to: startPosition)
+        let startPosition = contentsTextView?.beginningOfDocument
+        contentsTextView?.selectedTextRange = contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
         
         self.labelOfTitle?.text = movies?.title
         
@@ -74,7 +74,7 @@ class MakeCommentsViewController: UIViewController {
             guard let rating = Int(self.gradeOfLabel?.text ?? "0") else { return }
             guard let writer = self.userIdTextField?.text else { return }
             guard let movie_id = self.movies?.id else { return }
-            guard let contents = self.contentsTextView.text else { return }
+            guard let contents = self.contentsTextView?.text else { return }
 
             let postCommentData = PostComment(rating: rating, writer: writer, movie_id: movie_id, contents: contents)
             movieServiceProvider.postComment(postComment: postCommentData) {
@@ -95,7 +95,7 @@ class MakeCommentsViewController: UIViewController {
         guard
             let userRate = gradeOfLabel?.text, !userRate.isEmpty,
             let userId = userIdTextField?.text, !userId.isEmpty,
-            let contents = contentsTextView.text, !contents.isEmpty
+            let contents = contentsTextView?.text, !contents.isEmpty
         else {
             return false
         }
@@ -195,23 +195,23 @@ extension MakeCommentsViewController: UITableViewDelegate {
 // MARK: - UITextViewDelegate
 extension MakeCommentsViewController: UITextViewDelegate {
     func textViewDidChangeSelection(_ textView: UITextView) {
-        if contentsTextView.textColor == UIColor.systemGray4 {
-            let startPosition = contentsTextView.beginningOfDocument
-            contentsTextView.selectedTextRange = contentsTextView.textRange(from: startPosition, to: startPosition)
+        if contentsTextView?.textColor == UIColor.systemGray4 {
+            let startPosition = contentsTextView?.beginningOfDocument
+            contentsTextView?.selectedTextRange = contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        if contentsTextView.text.isEmpty {
-            contentsTextView.text = "내용 입력하세요."
-            contentsTextView.textColor = UIColor.systemGray4
+        if contentsTextView?.text.isEmpty != nil {
+            contentsTextView?.text = "내용 입력하세요."
+            contentsTextView?.textColor = UIColor.systemGray4
         }
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        if contentsTextView.textColor == UIColor.systemGray4 {
-            contentsTextView.text = nil
-            contentsTextView.textColor = UIColor.black
+        if contentsTextView?.textColor == UIColor.systemGray4 {
+            contentsTextView?.text = nil
+            contentsTextView?.textColor = UIColor.black
         }
     }
 }

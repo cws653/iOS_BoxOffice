@@ -10,12 +10,12 @@ import UIKit
 
 class DetailViewCastCell: UITableViewCell {
 
-    @IBOutlet weak var directorLabel: UILabel!
-    @IBOutlet weak var actorLabel: UILabel!
+    @IBOutlet weak var directorLabel: UILabel?
+    @IBOutlet weak var actorLabel: UILabel?
     
     internal func setUI(with movie: DetailContents) {
         
-        self.directorLabel.text = movie.director
-        self.actorLabel.text = movie.actor
+        self.directorLabel?.text = movie.director
+        self.actorLabel?.text = movie.actor
     }
 }
