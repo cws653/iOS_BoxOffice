@@ -8,16 +8,6 @@
 
 import Foundation
 
-//
-//  Model.swift
-//  BoxOffice
-//
-//  Created by 최원석 on 2020/08/27.
-//  Copyright © 2020 최원석. All rights reserved.
-//
-
-import Foundation
-
 struct DetailContents: Codable {
     
     let audience: Int

@@ -11,7 +11,6 @@ import UIKit
 class MovieListCollectionViewController: UIViewController {
 
     private let movieService: MovieServiceProvider = .shared
-//    private let cellIdentifier = "MovieListCollectionViewCell"
     var arrayMovies: [Movies] = []
 
     @IBOutlet private weak var movieListCollectionView: UICollectionView?

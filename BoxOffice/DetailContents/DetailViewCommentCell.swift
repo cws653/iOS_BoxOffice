@@ -10,23 +10,23 @@ import UIKit
 
 class DetailViewCommentCell: UITableViewCell {
     
-    @IBOutlet weak var writer: UILabel!
-    @IBOutlet weak var timestamp: UILabel!
-    @IBOutlet weak var contents: UITextView!
+    @IBOutlet weak var writer: UILabel?
+    @IBOutlet weak var timestamp: UILabel?
+    @IBOutlet weak var contents: UITextView?
     
-    @IBOutlet weak var firstStar: UIImageView!
-    @IBOutlet weak var secondStar: UIImageView!
-    @IBOutlet weak var thirdStar: UIImageView!
-    @IBOutlet weak var fourthStar: UIImageView!
-    @IBOutlet weak var fifthStar: UIImageView!
+    @IBOutlet weak var firstStar: UIImageView?
+    @IBOutlet weak var secondStar: UIImageView?
+    @IBOutlet weak var thirdStar: UIImageView?
+    @IBOutlet weak var fourthStar: UIImageView?
+    @IBOutlet weak var fifthStar: UIImageView?
     
     internal func setUI(with comment: Comment) {
         let date = Date(timeIntervalSince1970: comment.timestamp)
         let strDate = self.setDateFormatter().string(from: date)
         
-        self.writer.text = comment.writer
-        self.timestamp.text = "\(strDate)"
-        self.contents.text = comment.contents
+        self.writer?.text = comment.writer
+        self.timestamp?.text = "\(strDate)"
+        self.contents?.text = comment.contents
         
         self.setImages(with: comment.rating)
     }
@@ -42,18 +42,18 @@ class DetailViewCommentCell: UITableViewCell {
     private func setImages(with rating: Double) {
         let defaultStarImage = UIImage(named: "ic_star_large")
         
-        self.firstStar.image = nil
-        self.secondStar.image = nil
-        self.thirdStar.image = nil
-        self.fourthStar.image = nil
-        self.fifthStar.image = nil
+        self.firstStar?.image = nil
+        self.secondStar?.image = nil
+        self.thirdStar?.image = nil
+        self.fourthStar?.image = nil
+        self.fifthStar?.image = nil
         
         if let images = StarImageMaker.setStartImages(with: rating) {
-            self.firstStar.image = images[safe: 0] ?? defaultStarImage
-            self.secondStar.image = images[safe: 1] ?? defaultStarImage
-            self.thirdStar.image = images[safe: 2] ?? defaultStarImage
-            self.fourthStar.image = images[safe: 3] ?? defaultStarImage
-            self.fifthStar.image = images[safe: 4] ?? defaultStarImage
+            self.firstStar?.image = images[safe: 0] ?? defaultStarImage
+            self.secondStar?.image = images[safe: 1] ?? defaultStarImage
+            self.thirdStar?.image = images[safe: 2] ?? defaultStarImage
+            self.fourthStar?.image = images[safe: 3] ?? defaultStarImage
+            self.fifthStar?.image = images[safe: 4] ?? defaultStarImage
         }
     }
 }

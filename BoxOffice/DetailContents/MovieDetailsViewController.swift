@@ -146,8 +146,8 @@ extension MovieDetailsViewController: UITableViewDataSource {
             
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
             
-            cell.imageOfMovie.isUserInteractionEnabled = true
-            cell.imageOfMovie.addGestureRecognizer(tapGestureRecognizer)
+            cell.imageOfMovie?.isUserInteractionEnabled = true
+            cell.imageOfMovie?.addGestureRecognizer(tapGestureRecognizer)
             
             var model: DetailContents
             if self.arrayDetailMovies.isEmpty {
