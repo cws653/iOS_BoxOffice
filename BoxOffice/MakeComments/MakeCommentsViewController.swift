@@ -19,6 +19,7 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
     
     weak var delegate: MakeCommentsViewDelegate?
     var movies: Movies?
+<<<<<<< main
     private let userInfo = UserDefaults.standard
     private var finishButton: UIBarButtonItem {
         let finishButton = UIBarButtonItem.init(title: "완료", style: UIBarButtonItem.Style.plain, target: self, action: #selector(makeComments(sender:)))
@@ -37,11 +38,28 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
     @IBOutlet private weak var userIdTextField: UITextField?
     @IBOutlet private weak var starView: Star?
     
+=======
+
+    @IBOutlet weak var labelOfTitle: UILabel?
+    @IBOutlet weak var imageOfGrade: UIImageView?
+    @IBOutlet weak var contentsTextView: UITextView?
+    @IBOutlet weak var gradeOfLabel: UILabel?
+    @IBOutlet weak var sliderOfGrade: UISlider?
+    @IBOutlet weak var userIdTextField: UITextField?
+
+    @IBOutlet weak var firstStar: UIImageView?
+    @IBOutlet weak var secondStar: UIImageView?
+    @IBOutlet weak var thirdStar: UIImageView?
+    @IBOutlet weak var fourthStar: UIImageView?
+    @IBOutlet weak var fifthStar: UIImageView?
+
+>>>>>>> refactor: IB 객체들 옵셔널 처리
     
     // MARK: - view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+<<<<<<< main
         setupView()
     }
     
@@ -49,6 +67,18 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
         self.title = "한줄평 작성"
         self.navigationItem.rightBarButtonItem = self.finishButton
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = self.backButton
+=======
+        let backButton = UIBarButtonItem.init(title: "취소", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
+
+        self.contentsTextView?.layer.borderWidth = 2.0
+        self.contentsTextView?.layer.borderColor = UIColor.systemOrange.cgColor
+        self.contentsTextView?.text = "내용을 입력해주세요."
+        self.contentsTextView?.textColor = UIColor.systemGray4
+        
+        let startPosition = contentsTextView?.beginningOfDocument
+        contentsTextView?.selectedTextRange = contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
+>>>>>>> refactor: IB 객체들 옵셔널 처리
         
         guard let movie = self.movies else { return }
         self.titleLabel?.text = movie.title
@@ -66,12 +96,20 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
             self.userInfo.set(userIdTextField?.text, forKey: "userId")
             
             guard let writer = self.userIdTextField?.text else { return }
+<<<<<<< main
             guard let movieId = self.movies?.id else { return }
             guard let contents = self.contentsTextView?.text else { return }
             let rating = Int(round(self.gradeSlider?.value ?? 0))
             
             let postCommentData = PostComment(rating: rating, writer: writer, movie_id: movieId, contents: contents)
             MovieServiceProvider.shared.postComment(postComment: postCommentData) {
+=======
+            guard let movie_id = self.movies?.id else { return }
+            guard let contents = self.contentsTextView?.text else { return }
+
+            let postCommentData = PostComment(rating: rating, writer: writer, movie_id: movie_id, contents: contents)
+            movieServiceProvider.postComment(postComment: postCommentData) {
+>>>>>>> refactor: IB 객체들 옵셔널 처리
                 DispatchQueue.main.async {
                     self.delegate?.makeComment()
                     self.navigationController?.popViewController(animated: true)
@@ -116,9 +154,15 @@ extension MakeCommentsViewController: UITableViewDelegate {
 // MARK: - UITextViewDelegate
 extension MakeCommentsViewController: UITextViewDelegate {
     func textViewDidChangeSelection(_ textView: UITextView) {
+<<<<<<< main
         if self.contentsTextView?.textColor == UIColor.systemGray4 {
             let startPosition = self.contentsTextView?.beginningOfDocument
             self.contentsTextView?.selectedTextRange = self.contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
+=======
+        if contentsTextView?.textColor == UIColor.systemGray4 {
+            let startPosition = contentsTextView?.beginningOfDocument
+            contentsTextView?.selectedTextRange = contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
+>>>>>>> refactor: IB 객체들 옵셔널 처리
         }
     }
     

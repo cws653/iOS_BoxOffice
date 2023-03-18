@@ -64,10 +64,33 @@ extension MovieDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
+<<<<<<< main
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailPosterCell
             cell.delegate = self
             guard let model = self.viewModel.detailContents, let imageData = self.viewModel.imageData else { return UITableViewCell() }
             cell.setupUI(model: model, imageData: imageData)
+=======
+            guard let cell = self.tableView?.dequeueReusableCell(withIdentifier: "DetailViewPosterCell") as? DetailViewPosterCell  else {
+                return UITableViewCell()
+            }
+            
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+            
+            cell.imageOfMovie?.isUserInteractionEnabled = true
+            cell.imageOfMovie?.addGestureRecognizer(tapGestureRecognizer)
+            
+            var model: DetailContents
+            if self.arrayDetailMovies.isEmpty {
+                return .init()
+            } else {
+                if self.arrayDetailMovies.count > indexPath.row {
+                    model = self.arrayDetailMovies[indexPath.row]
+                } else {
+                    return .init()
+                }
+            }
+            cell.setUI(with: model)
+>>>>>>> refactor: IB 객체들 옵셔널 처리
             return cell
 
         } else if indexPath.section == 1 {

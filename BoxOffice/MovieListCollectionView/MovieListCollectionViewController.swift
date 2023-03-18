@@ -10,6 +10,7 @@ import UIKit
 
 final class MovieListCollectionViewController: UIViewController {
 
+<<<<<<< main
     private var viewModel = MovieListCollectionViewModel()
     var sortMode: MovieSortMode? {
         didSet {
@@ -19,6 +20,10 @@ final class MovieListCollectionViewController: UIViewController {
             }
         }
     }
+=======
+    private let movieService: MovieServiceProvider = .shared
+    var arrayMovies: [Movies] = []
+>>>>>>> refactor: IB 객체들 옵셔널 처리
 
     @IBOutlet private weak var movieListCollectionView: UICollectionView?
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {

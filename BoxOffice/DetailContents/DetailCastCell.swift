@@ -10,10 +10,18 @@ import UIKit
 
 class DetailCastCell: UITableViewCell, Reusable {
 
+<<<<<<< main:BoxOffice/DetailContents/DetailCastCell.swift
     @IBOutlet private weak var directorLabel: UILabel?
     @IBOutlet private weak var actorLabel: UILabel?
     
     internal func setUI(with movie: DetailContents) {
+=======
+    @IBOutlet weak var directorLabel: UILabel?
+    @IBOutlet weak var actorLabel: UILabel?
+    
+    internal func setUI(with movie: DetailContents) {
+        
+>>>>>>> refactor: IB 객체들 옵셔널 처리:BoxOffice/DetailContents/DetailViewCastCell.swift
         self.directorLabel?.text = movie.director
         self.actorLabel?.text = movie.actor
     }
