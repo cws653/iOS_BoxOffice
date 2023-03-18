@@ -685,7 +685,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dsv-Ge-huW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6171" y="790"/>
+            <point key="canvasLocation" x="6177" y="869"/>
         </scene>
         <!--예매율-->
         <scene sceneID="XkJ-xZ-fpa">
@@ -705,7 +705,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="collectionViewCell" id="Zzf-qc-exC" customClass="MovieListCollectionViewCell" customModule="BoxOffice" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MovieListCollectionViewCell" id="Zzf-qc-exC" customClass="MovieListCollectionViewCell" customModule="BoxOffice" customModuleProvider="target">
                                         <rect key="frame" x="50.5" y="0.0" width="313" height="439"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="nLY-fS-xZH">
@@ -788,7 +788,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="collectionView" destination="ItF-Ut-3N6" id="9KI-lg-hRz"/>
+                        <outlet property="movieListCollectionView" destination="ItF-Ut-3N6" id="9KI-lg-hRz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BRT-4V-7ll" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

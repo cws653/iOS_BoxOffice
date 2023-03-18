@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieListCollectionViewCell: UICollectionViewCell {
+class MovieListCollectionViewCell: UICollectionViewCell, Reusable {
     @IBOutlet weak var movieImageView: UIImageView?
     @IBOutlet weak var gradeImageView: UIImageView?
     @IBOutlet weak var movieTitleLabel: UILabel?
