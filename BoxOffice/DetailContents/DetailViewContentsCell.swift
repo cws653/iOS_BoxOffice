@@ -10,12 +10,12 @@ import UIKit
 
 class DetailViewContentsCell: UITableViewCell {
 
-    @IBOutlet weak var content: UITextView!
+    @IBOutlet weak var content: UITextView?
 
     internal func setUI(with model: DetailContents) {
         
-        self.content.text = model.synopsis
-        self.content.isScrollEnabled = false
-        self.content.isEditable = false
+        self.content?.text = model.synopsis
+        self.content?.isScrollEnabled = false
+        self.content?.isEditable = false
     }
 }
