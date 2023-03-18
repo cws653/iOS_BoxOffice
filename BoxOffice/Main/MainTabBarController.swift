@@ -14,8 +14,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         super.viewDidLoad()
         
         self.tabBarController?.delegate = self
-        
-        // Do any additional setup after loading the view.
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
