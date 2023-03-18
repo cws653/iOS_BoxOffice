@@ -8,27 +8,13 @@
 
 import UIKit
 
-enum MovieSortMode: Int {
-    case reservationRate = 0
-    case quration = 1
-    case open = 2
-    
-    var title: String {
-        switch self {
-        case .reservationRate: return "예매율"
-        case .quration: return "큐레이션"
-        case .open: return "개봉일"
-        }
-    }
-}
-
 class MovieListTableViewController: UIViewController{
     
     private let movieService: MovieServiceProvider = .shared
-    private let cellIdentifier: String = "tableViewCell"
+//    private let cellIdentifier: String = "tableViewCell"
     var arrayMovies: [Movies] = []
 
-    @IBOutlet private weak var tableView: UITableView?
+    @IBOutlet private weak var movieListTableView: UITableView?
 
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
         self.showAlertController(style: UIAlertController.Style.actionSheet)
@@ -45,23 +31,21 @@ class MovieListTableViewController: UIViewController{
         self.movieService.requestMovieList(movieSortMode: .reservationRate) { movies in
             DispatchQueue.main.async {
                 self.arrayMovies = movies
-                self.tableView?.reloadData()
+                self.movieListTableView?.reloadData()
             }
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.tableView?.reloadData()
-        }
+        
+        self.movieListTableView?.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.async {
-            self.tableView?.reloadData()
-        }
+        
+        self.movieListTableView?.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -93,7 +77,7 @@ class MovieListTableViewController: UIViewController{
                 DispatchQueue.main.async {
                     self.navigationItem.title = movieSortMode.title
                     self.arrayMovies = movies
-                    self.tableView?.reloadData()
+                    self.movieListTableView?.reloadData()
                 }
             }
         }
@@ -125,9 +109,10 @@ extension MovieListTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell: MovieListTableViewCell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? MovieListTableViewCell else {
-            return UITableViewCell()
-        }
+//        guard let cell: MovieListTableViewCell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? MovieListTableViewCell else {
+//            return UITableViewCell()
+//        }
+        let cell = tableView.dequeueReusableCell(for: indexPath) as MovieListTableViewCell
         
         let model = self.arrayMovies[indexPath.row]
         
