@@ -99,7 +99,7 @@ extension MovieListCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let movieDetailsViewController = storyboard.instantiateViewController(withIdentifier: "MovieDetailsVC") as? MovieDetailsViewController {
-            movieDetailsViewController.movies = self.arrayMovies[indexPath.item]
+            movieDetailsViewController.movie = self.arrayMovies[indexPath.item]
             
             self.navigationController?.pushViewController(movieDetailsViewController, animated: true)
         }
