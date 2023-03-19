@@ -19,6 +19,8 @@ final class MovieDetailsViewController: UIViewController, StoryboardBased {
     
     @IBOutlet private weak var movieDetailTableView: UITableView?
     
+    @IBOutlet private weak var tableView: UITableView?
+    
     // MARK: - view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
