@@ -11,11 +11,10 @@ import UIKit
 class MovieListTableViewController: UIViewController{
     
     private let movieService: MovieServiceProvider = .shared
-//    private let cellIdentifier: String = "tableViewCell"
     var arrayMovies: [Movies] = []
+    var viewModel = MovieListTableViewModel()
 
     @IBOutlet private weak var movieListTableView: UITableView?
-
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
         self.showAlertController(style: UIAlertController.Style.actionSheet)
     }
@@ -24,18 +23,13 @@ class MovieListTableViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBar.barTintColor = .systemIndigo
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.tintColor = .white
+        self.setupView()
         
-        self.movieService.requestMovieList(movieSortMode: .reservationRate) { movies in
-            DispatchQueue.main.async {
-                self.arrayMovies = movies
-                self.movieListTableView?.reloadData()
-            }
+        self.viewModel.getMovieList(movieMode: .reservationRate) {
+            self.movieListTableView?.reloadData()
         }
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -83,6 +77,12 @@ class MovieListTableViewController: UIViewController{
         }
         return alertAction
     }
+    
+    func setupView() {
+        self.navigationController?.navigationBar.barTintColor = .systemIndigo
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.tintColor = .white
+    }
 }
 
 // MARK: - UITableViewDelegeate
@@ -90,7 +90,7 @@ extension MovieListTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let movieDetailsViewController = storyboard.instantiateViewController(withIdentifier: "MovieDetailsVC") as? MovieDetailsViewController {
-            movieDetailsViewController.movies = self.arrayMovies[indexPath.row]
+            movieDetailsViewController.movies = self.viewModel.movieList?[indexPath.row]
 
             self.navigationController?.pushViewController(movieDetailsViewController, animated: true)
         }
@@ -104,29 +104,18 @@ extension MovieListTableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.arrayMovies.count
+        return self.viewModel.movieList?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-//        guard let cell: MovieListTableViewCell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? MovieListTableViewCell else {
-//            return UITableViewCell()
-//        }
         let cell = tableView.dequeueReusableCell(for: indexPath) as MovieListTableViewCell
-        
-        let model = self.arrayMovies[indexPath.row]
-        
-        guard let imageURL: URL = URL(string: model.thumb) else {
+        guard let movieList = self.viewModel.movieList else {
             return UITableViewCell()
         }
+        let imageData = self.viewModel.imageData
         
-        URLSession.shared.dataTask(with: imageURL) { data, response, error in
-            guard let data = data else { return }
-            
-            DispatchQueue.main.async {
-                cell.setupUI(model: model, data: data)
-            }
-        }.resume()
+        cell.setupUI(model: movieList[indexPath.row], thumbnailData: imageData[indexPath.row])
         
         return cell
     }

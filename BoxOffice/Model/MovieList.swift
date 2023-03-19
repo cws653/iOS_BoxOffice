@@ -24,18 +24,9 @@ struct Movies: Codable {
     let date: String
     let id: String
     
-    // 테이블뷰용
-    var tableReservationRate: String {
-        return "예매율: " + String(self.reservationRate)
-    }
-    var tableReservationGrade: String {
-        return "예매순위: " + String(self.reservationGrade)
-    }
-    var tableUserRating: String {
-        return "평점: " + String(self.userRating)
-    }
-    var tableOpenDate: String {
-        return "개봉일: " + self.date
+    
+    var thumbToURL: URL? {
+        return URL(string: thumb)
     }
     
     // 컬렉션뷰용
