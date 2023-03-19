@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieListTableViewController: UIViewController{
+class MovieListTableViewController: UIViewController {
     
     private let movieService: MovieServiceProvider = .shared
     var arrayMovies: [Movies] = []
@@ -88,12 +88,9 @@ class MovieListTableViewController: UIViewController{
 // MARK: - UITableViewDelegeate
 extension MovieListTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let movieDetailsViewController = storyboard.instantiateViewController(withIdentifier: "MovieDetailsVC") as? MovieDetailsViewController {
-            movieDetailsViewController.movies = self.viewModel.movieList?[indexPath.row]
-
-            self.navigationController?.pushViewController(movieDetailsViewController, animated: true)
-        }
+        let movieDetailViewController = MovieDetailsViewController.instantiate()
+        movieDetailViewController.movie = self.viewModel.movieList?[indexPath.row]
+        self.navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }
 

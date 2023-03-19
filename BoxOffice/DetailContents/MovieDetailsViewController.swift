@@ -8,14 +8,16 @@
 
 import UIKit
 
-class MovieDetailsViewController: UIViewController {
-    
-    @IBOutlet private weak var tableView: UITableView?
-    
+class MovieDetailsViewController: UIViewController, StoryboardBased {
+    static var storyboard: UIStoryboard {
+        UIStoryboard(name: "Main", bundle: nil)
+    }
     private var arrayDetailMovies:[DetailContents] = []
     private var comments: [Comment] = []
     private let movieService = MovieServiceProvider()
-    var movies: Movies?
+    var movie: Movies?
+    
+    @IBOutlet private weak var tableView: UITableView?
     
     // MARK: - view life cycle
     override func viewDidLoad() {
@@ -27,9 +29,9 @@ class MovieDetailsViewController: UIViewController {
         self.navigationController?.navigationBar.barTintColor = .systemIndigo
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
-        self.title = movies?.title
+        self.title = movie?.title
 
-        guard let movieId = movies?.id else { return }
+        guard let movieId = movie?.id else { return }
         self.movieService.requestMovieDetails(movieId: movieId) { movies in
             DispatchQueue.main.async {
                 self.arrayDetailMovies = movies
@@ -41,7 +43,7 @@ class MovieDetailsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        guard let movieId = movies?.id else { return }
+        guard let movieId = movie?.id else { return }
         self.movieService.requestCommentList(movieId: movieId) { commenList in
             DispatchQueue.main.async {
                 self.comments = commenList?.comments ?? []
@@ -65,7 +67,7 @@ class MovieDetailsViewController: UIViewController {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         if let makeCommentsViewController = storyBoard.instantiateViewController(withIdentifier: "MakeCommentsVC" ) as? MakeCommentsViewController {
 
-            makeCommentsViewController.movies = self.movies
+            makeCommentsViewController.movies = self.movie
             
             self.navigationController?.pushViewController(makeCommentsViewController, animated: true)
         }
