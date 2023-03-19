@@ -14,13 +14,8 @@ class MovieDetailsViewController: UIViewController {
     
     private var arrayDetailMovies:[DetailContents] = []
     private var comments: [Comment] = []
-    var movies: Movies?
-    
-//    var viewControllerTitle: String?
-//    var gradeOfMovie: Int?
-//    var movieId: String?
-    
     private let movieService = MovieServiceProvider()
+    var movies: Movies?
     
     // MARK: - view life cycle
     override func viewDidLoad() {

@@ -23,5 +23,4 @@ extension MovieSortMode {
         case .open: return "개봉일"
         }
     }
-    
 }

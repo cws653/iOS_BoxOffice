@@ -108,4 +108,13 @@ class MovieServiceProvider {
             print("Encode data nil")
         }
     }
+    
+    func getMovieImageData(url: URL, completion:@escaping (Data) -> Void) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            guard let data = data else { return }
+            
+            completion(data)
+        }.resume()
+    }
 }
