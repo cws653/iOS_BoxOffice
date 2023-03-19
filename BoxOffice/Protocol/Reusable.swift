@@ -28,7 +28,7 @@ extension UITableView {
         guard let cell = dequeueReusableCell(withIdentifier: T.reusableIdentifier, for: indexPath) as? T else {
             fatalError("Could not dequeue a cell with identifier: \(T.reusableIdentifier)")
         }
-        
+
         return cell
     }
 }

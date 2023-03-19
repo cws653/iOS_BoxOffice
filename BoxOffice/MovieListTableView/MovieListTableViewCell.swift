@@ -30,20 +30,31 @@ class MovieListTableViewCell: UITableViewCell, Reusable {
         self.gradeImageView?.image = nil
     }
 
-    func setupUI(model: Movies, data: Data) {
-        self.thumbImageView?.image = UIImage(data: data)
-
-        switch model.grade {
-        case 0: self.gradeImageView?.image = UIImage(named: "ic_allages")
-        case 12: self.gradeImageView?.image = UIImage(named: "ic_12")
-        case 15: self.gradeImageView?.image = UIImage(named: "ic_15")
-        case 19: self.gradeImageView?.image = UIImage(named: "ic_19")
-        default: self.gradeImageView?.image = nil
-        }
-
+    func setupUI(model: Movies, thumbnailData: Data) {
+        self.thumbImageView?.image = UIImage(data: thumbnailData)
+        self.gradeImageView?.image = Grade(rawValue: model.grade)?.image
         self.titleLabel?.text = model.title
-        self.rateLabel?.text = model.tableUserRating + " " + model.tableReservationGrade + " " + model.tableReservationRate
-        self.openDateLabel?.text = model.tableOpenDate
+        self.rateLabel?.text = "예매율: " + String(model.reservationRate) + " " + "예매순위: " + String(model.reservationGrade) + " " + String(model.userRating)
+        self.openDateLabel?.text = "개봉일: " + String(model.date)
     }
+}
 
+enum Grade: Int {
+    case zero = 0
+    case twelve = 12
+    case fifteen = 15
+    case nineteen = 19
+    
+    var image: UIImage? {
+        switch self {
+        case .zero:
+            return UIImage(named: "ic_allages")
+        case .twelve:
+            return UIImage(named: "ic_12")
+        case .fifteen:
+            return UIImage(named: "ic_15")
+        case .nineteen:
+            return UIImage(named: "ic_19")
+        }
+    }
 }
