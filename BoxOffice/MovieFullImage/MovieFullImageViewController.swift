@@ -8,9 +8,9 @@
 
 import UIKit
 
-class MovieFullImageViewController: UIViewController {
+final class MovieFullImageViewController: UIViewController {
 
-    @IBOutlet private var fullScreen: UIImageView!
+    @IBOutlet var fullScreen: UIImageView!
      
      override func viewDidLoad() {
          super.viewDidLoad()

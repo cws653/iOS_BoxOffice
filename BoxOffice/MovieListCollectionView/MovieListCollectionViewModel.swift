@@ -10,8 +10,8 @@ import Foundation
 
 final class MovieListCollectionViewModel {
     
-    private var movieList: [Movies]?
-    private var imageData: [Data] = []
+    private(set) var movieList: [Movies]?
+    private(set) var imageData: [Data] = []
     
     func getMovieList(movieMode: MovieSortMode, completion:@escaping () -> Void) {
         MovieServiceProvider.shared.getMovieList(movieSortMode: movieMode) { movies in
