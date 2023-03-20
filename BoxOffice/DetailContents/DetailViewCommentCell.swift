@@ -58,12 +58,6 @@ class DetailViewCommentCell: UITableViewCell {
     }
 }
 
-extension Array {
-    subscript (safe index: Int) -> Element? {
-        return indices ~= index ? self[index] : nil
-    }
-}
-
 struct StarImageMaker {
     static func setStartImages(with inputValue: Double) -> [UIImage?]? {
         let defaultStar = UIImage(named: "ic_star_large")

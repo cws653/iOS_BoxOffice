@@ -16,7 +16,7 @@ class MovieServiceProvider {
         return "http://connect-boxoffice.run.goorm.io/"
     }
     
-    func requestMovieList(movieSortMode: MovieSortMode,  completion:@escaping ([Movies]) -> Void) {
+    func getMovieList(movieSortMode: MovieSortMode,  completion:@escaping ([Movies]) -> Void) {
         let baseWithFilterTypeURL = baseURL + "movies?order_type=" + "\(movieSortMode.rawValue)"
         guard let url = URL(string: baseWithFilterTypeURL) else {return}
         let session: URLSession = URLSession(configuration: .default)
@@ -36,7 +36,7 @@ class MovieServiceProvider {
         dataTask.resume()
     }
     
-    func requestMovieDetails(movieId: String, completion:@escaping ([DetailContents]) -> Void) {
+    func getMovieDetails(movieId: String, completion:@escaping ([DetailContents]) -> Void) {
         let baseWithFilterTypeURL = baseURL+"movie?id="+"\(movieId)"
         guard let url = URL(string: baseWithFilterTypeURL) else {return}
         let session: URLSession = URLSession(configuration: .default)
@@ -57,7 +57,7 @@ class MovieServiceProvider {
     }
     
     
-    func requestCommentList(movieId: String, completion:@escaping (CommentList?) -> Void) {
+    func getCommentList(movieId: String, completion:@escaping (CommentList?) -> Void) {
         let baseWithFilterTypeURL = baseURL+"comments?movie_id="+"\(movieId)"
         
         guard let url = URL(string: baseWithFilterTypeURL) else {return}

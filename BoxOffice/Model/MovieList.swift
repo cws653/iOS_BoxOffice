@@ -24,25 +24,6 @@ struct Movies: Codable {
     let date: String
     let id: String
     
-    
-    var thumbToURL: URL? {
-        return URL(string: thumb)
-    }
-    
-    // 컬렉션뷰용
-    var collectionReservationRate: String {
-        return String(reservationRate) + "%"
-    }
-    var collectionReservationGrade: String {
-        return String(reservationGrade) + "위"
-    }
-    var collectionUserRating: String {
-        return "(" + String(userRating) + ")"
-    }
-    var collectionOpenDate: String {
-        return self.date
-    }
-    
     enum CodingKeys: String, CodingKey {
         case grade, thumb, date, id, title
         case reservationGrade = "reservation_grade"
