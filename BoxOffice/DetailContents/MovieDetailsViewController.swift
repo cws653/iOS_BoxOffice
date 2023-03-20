@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieDetailsViewController: UIViewController, StoryboardBased {
+final class MovieDetailsViewController: UIViewController, StoryboardBased {
     static var storyboard: UIStoryboard {
         UIStoryboard(name: "Main", bundle: nil)
     }

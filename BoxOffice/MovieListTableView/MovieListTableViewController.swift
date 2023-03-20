@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieListTableViewController: UIViewController {
+final class MovieListTableViewController: UIViewController {
     
     private var viewModel = MovieListTableViewModel()
     var sortMode: MovieSortMode? {

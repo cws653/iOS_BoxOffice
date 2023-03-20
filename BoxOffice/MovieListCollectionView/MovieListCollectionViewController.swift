@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieListCollectionViewController: UIViewController {
+final class MovieListCollectionViewController: UIViewController {
 
     private var viewModel = MovieListCollectionViewModel()
     var sortMode: MovieSortMode? {
@@ -37,11 +37,6 @@ class MovieListCollectionViewController: UIViewController {
         
         self.sortMode = .reservationRate
         self.setupView()
-//        self.viewModel.getMovieList(movieMode: .reservationRate) {
-//            self.sortMode = .reservationRate
-//            self.navigationItem.title = self.sortMode?.title
-//            self.movieListCollectionView?.reloadData()
-//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
