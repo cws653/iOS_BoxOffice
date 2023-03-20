@@ -32,7 +32,7 @@ class MovieDetailsViewController: UIViewController, StoryboardBased {
         self.title = movie?.title
 
         guard let movieId = movie?.id else { return }
-        self.movieService.requestMovieDetails(movieId: movieId) { movies in
+        self.movieService.getMovieDetails(movieId: movieId) { movies in
             DispatchQueue.main.async {
                 self.arrayDetailMovies = movies
                 self.tableView?.reloadData()
@@ -44,7 +44,7 @@ class MovieDetailsViewController: UIViewController, StoryboardBased {
         super.viewWillAppear(animated)
 
         guard let movieId = movie?.id else { return }
-        self.movieService.requestCommentList(movieId: movieId) { commenList in
+        self.movieService.getCommentList(movieId: movieId) { commenList in
             DispatchQueue.main.async {
                 self.comments = commenList?.comments ?? []
                 self.tableView?.reloadData()

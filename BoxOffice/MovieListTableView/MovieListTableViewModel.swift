@@ -8,13 +8,13 @@
 
 import Foundation
 
-class MovieListTableViewModel {
+final class MovieListTableViewModel {
     
-    var movieList: [Movies]?
-    var imageData: [Data] = []
+    private var movieList: [Movies]?
+    private var imageData: [Data] = []
     
     func getMovieList(movieMode: MovieSortMode, completion:@escaping () -> Void) {
-        MovieServiceProvider.shared.requestMovieList(movieSortMode: movieMode) { movies in
+        MovieServiceProvider.shared.getMovieList(movieSortMode: movieMode) { movies in
             DispatchQueue.main.async {
                 self.movieList = movies
                 self.getImageDatas(from: movies) {
@@ -33,8 +33,7 @@ class MovieListTableViewModel {
             MovieServiceProvider.shared.getMovieImageData(url: imageURL) { data in
                 self.imageData.append(data)
             }
-            
-            completion()
         }
+        completion()
     }
 }

@@ -713,25 +713,25 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nyp-ul-Bw4">
-                                                    <rect key="frame" x="10" y="10" width="293" height="319.5"/>
+                                                    <rect key="frame" x="10" y="10" width="293" height="307.5"/>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Qsf-Ux-Y2f">
-                                                    <rect key="frame" x="0.0" y="339.5" width="313" height="99.5"/>
+                                                    <rect key="frame" x="0.0" y="327.5" width="313" height="111.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PAC-aZ-So8">
-                                                            <rect key="frame" x="0.0" y="0.0" width="313" height="26.5"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="PAC-aZ-So8">
+                                                            <rect key="frame" x="0.0" y="0.0" width="313" height="30.5"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1bX-K2-czM">
-                                                            <rect key="frame" x="0.0" y="36.5" width="313" height="26.5"/>
+                                                            <rect key="frame" x="0.0" y="40.5" width="313" height="30.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0DX-cf-Tfn">
-                                                            <rect key="frame" x="0.0" y="73" width="313" height="26.5"/>
+                                                            <rect key="frame" x="0.0" y="81" width="313" height="30.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -750,6 +750,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="Qsf-Ux-Y2f" secondAttribute="trailing" id="7QW-gh-W5L"/>
                                                 <constraint firstAttribute="bottom" secondItem="Qsf-Ux-Y2f" secondAttribute="bottom" id="EHJ-3L-kZn"/>
                                                 <constraint firstItem="Nyp-ul-Bw4" firstAttribute="leading" secondItem="nLY-fS-xZH" secondAttribute="leading" constant="10" id="H78-0p-U9I"/>
+                                                <constraint firstItem="Nyp-ul-Bw4" firstAttribute="height" secondItem="nLY-fS-xZH" secondAttribute="height" multiplier="0.7" id="I6I-Fe-ebI"/>
                                                 <constraint firstItem="Qsf-Ux-Y2f" firstAttribute="top" secondItem="Nyp-ul-Bw4" secondAttribute="bottom" constant="10" id="Tph-Fp-CKC"/>
                                                 <constraint firstItem="Xo8-6I-PA3" firstAttribute="top" secondItem="nLY-fS-xZH" secondAttribute="top" constant="10" id="bij-uZ-0iI"/>
                                                 <constraint firstItem="Nyp-ul-Bw4" firstAttribute="top" secondItem="nLY-fS-xZH" secondAttribute="top" constant="10" id="cTR-aU-a5x"/>
@@ -769,6 +770,10 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="lE1-N5-emj" id="evg-GD-X5b"/>
+                                    <outlet property="delegate" destination="lE1-N5-emj" id="GQD-3I-DYs"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="bjO-Tl-MIX"/>
@@ -817,7 +822,7 @@
         <!--tableview-->
         <scene sceneID="XxO-6u-ie3">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Kim-mk-XtS" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Kim-mk-XtS" customClass="ReuseNavigationViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="tableview" image="ic_table" selectedImage="ic_table" id="Xeq-Je-G13"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="6MM-Bo-KTK">
@@ -836,7 +841,7 @@
         <!--CollectionView-->
         <scene sceneID="EIM-fL-1NQ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NOD-fg-2O5" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NOD-fg-2O5" customClass="ReuseNavigationViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="CollectionView" image="ic_collection" selectedImage="ic_collection" id="NeV-V3-lvO"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ME3-UC-ixX">
