@@ -10,99 +10,72 @@ import UIKit
 
 class MovieListCollectionViewController: UIViewController {
 
-    private let movieService: MovieServiceProvider = .shared
-    var arrayMovies: [Movies] = []
-
-    @IBOutlet private weak var movieListCollectionView: UICollectionView?
-
-    @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
-        self.showAlertController(style: UIAlertController.Style.actionSheet)
-    }
-
-    // MARK: - view life cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.movieListCollectionView?.delegate = self
-        self.movieListCollectionView?.dataSource = self
-
-        self.navigationController?.navigationBar.barTintColor = .systemIndigo
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.tintColor = .white
-
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 100, height: 100)
-        self.movieListCollectionView?.collectionViewLayout = layout
-        
-        self.movieService.requestMovieList(movieSortMode: .reservationRate) { movies in
-            DispatchQueue.main.async {
-                self.arrayMovies = movies
+    private var viewModel = MovieListCollectionViewModel()
+    var sortMode: MovieSortMode? {
+        didSet {
+            self.viewModel.getMovieList(movieMode: self.sortMode ?? .reservationRate) {
+                self.navigationItem.title = self.sortMode?.title
                 self.movieListCollectionView?.reloadData()
             }
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.movieListCollectionView?.reloadData()
-        }
+    @IBOutlet private weak var movieListCollectionView: UICollectionView?
+    @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
+        self.showAlertController(
+            title: "정렬방식 선택",
+            message: "영화를 어떤 순서로 정렬할까요?",
+            sortActionHandler: { sortMode in
+                self.sortMode = sortMode
+            }
+        )
+    }
+
+    // MARK: - view life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.sortMode = .reservationRate
+        self.setupView()
+//        self.viewModel.getMovieList(movieMode: .reservationRate) {
+//            self.sortMode = .reservationRate
+//            self.navigationItem.title = self.sortMode?.title
+//            self.movieListCollectionView?.reloadData()
+//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.async {
-            self.movieListCollectionView?.reloadData()
-        }
+        
+        self.navigationItem.title = self.sortMode?.title
+        self.movieListCollectionView?.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if let navigationController = self.tabBarController?.viewControllers?[0] as? UINavigationController {
+        if let navigationController = self.tabBarController?.viewControllers?[safe: 0] as? UINavigationController {
             if let movieListTableViewController = navigationController.viewControllers.first as? MovieListTableViewController {
-                movieListTableViewController.arrayMovies = self.arrayMovies
-                movieListTableViewController.navigationItem.title = self.navigationItem.title
+                movieListTableViewController.sortMode = self.sortMode
             }
         }
     }
     
-    private func showAlertController (style: UIAlertController.Style) {
+    private func setupView() {
 
-        let alertController = UIAlertController(title: "정렬방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
-
-        let cancelAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction) in print("취소버튼 선택")})
-        
-        alertController.addAction(alertActionSetting(movieSortMode: .reservationRate))
-        alertController.addAction(alertActionSetting(movieSortMode: .quration))
-        alertController.addAction(alertActionSetting(movieSortMode: .open))
-        alertController.addAction(cancelAction)
-        
-        self.present(alertController, animated: true, completion: { print("Alert controller shown")})
-    }
-
-    private func alertActionSetting(movieSortMode: MovieSortMode) -> UIAlertAction {
-        let alertAction = UIAlertAction(title: movieSortMode.title, style: UIAlertAction.Style.default) { _ in
-            self.movieService.requestMovieList(movieSortMode: movieSortMode) { movies in
-                DispatchQueue.main.async {
-                    self.navigationItem.title = movieSortMode.title
-                    self.arrayMovies = movies
-                    self.movieListCollectionView?.reloadData()
-                }
-            }
-        }
-        return alertAction
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        self.movieListCollectionView?.collectionViewLayout = layout
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension MovieListCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let movieDetailsViewController = storyboard.instantiateViewController(withIdentifier: "MovieDetailsVC") as? MovieDetailsViewController {
-            movieDetailsViewController.movie = self.arrayMovies[indexPath.item]
-            
-            self.navigationController?.pushViewController(movieDetailsViewController, animated: true)
-        }
+        let movieDetailViewController = MovieDetailsViewController.instantiate()
+        movieDetailViewController.movie = self.viewModel.movieList?[indexPath.row]
+        self.navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }
 
@@ -114,25 +87,18 @@ extension MovieListCollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.arrayMovies.count
+        return self.viewModel.movieList?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(for: indexPath) as MovieListCollectionViewCell
         
-        let model: Movies = self.arrayMovies[indexPath.row]
-
-        guard let imageURL: URL = URL(string: model.thumb) else {
+        guard let movieList = self.viewModel.movieList else {
             return UICollectionViewCell()
         }
-
-        URLSession.shared.dataTask(with: imageURL) { data, response, error in
-            guard let data = data else { return}
-
-            DispatchQueue.main.async {
-                cell.setupUI(model: model, data: data)
-            }
-        }.resume()
+        let imageData = self.viewModel.imageData
+        
+        cell.setupUI(model: movieList[safe: indexPath.row] ?? nil, thumbnailData: imageData[safe: indexPath.row] ?? nil)
 
         return cell
     }
@@ -142,17 +108,9 @@ extension MovieListCollectionViewController: UICollectionViewDataSource {
 extension MovieListCollectionViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let targetSizeX: CGFloat = collectionView.frame.width / 2 - 1
+        let targetSizeX: CGFloat = (collectionView.frame.width - 30) / 2
 
         return CGSize(width: targetSizeX, height: 2 * targetSizeX)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
     }
 }
 

@@ -10,78 +10,49 @@ import UIKit
 
 class MovieListTableViewController: UIViewController {
     
-    private let movieService: MovieServiceProvider = .shared
-    var arrayMovies: [Movies] = []
-    var viewModel = MovieListTableViewModel()
+    private var viewModel = MovieListTableViewModel()
+    var sortMode: MovieSortMode? {
+        didSet {
+            self.viewModel.getMovieList(movieMode: self.sortMode ?? .reservationRate) {
+                self.navigationItem.title = self.sortMode?.title
+                self.movieListTableView?.reloadData()
+            }
+        }
+    }
 
     @IBOutlet private weak var movieListTableView: UITableView?
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
-        self.showAlertController(style: UIAlertController.Style.actionSheet)
+        self.showAlertController(
+            title: "정렬방식 선택",
+            message: "영화를 어떤 순서로 정렬할까요?",
+            sortActionHandler: { sortMode in
+                self.sortMode = sortMode
+            }
+        )
     }
     
     // MARK: - view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.setupView()
-        
-        self.viewModel.getMovieList(movieMode: .reservationRate) {
-            self.movieListTableView?.reloadData()
-        }
-    }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.movieListTableView?.reloadData()
+        self.sortMode = .reservationRate
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        self.navigationItem.title = self.sortMode?.title
         self.movieListTableView?.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if let navigationController = self.tabBarController?.viewControllers?[1] as? UINavigationController {
+        
+        if let navigationController = self.tabBarController?.viewControllers?[safe: 1] as? UINavigationController {
             if let movieListCollectionViewController = navigationController.viewControllers.first as? MovieListCollectionViewController {
-                movieListCollectionViewController.arrayMovies = self.arrayMovies
-                movieListCollectionViewController.navigationItem.title = self.navigationItem.title
+                movieListCollectionViewController.sortMode = self.sortMode
             }
         }
-    }
-    
-    private func showAlertController (style: UIAlertController.Style) {
-        let alertController = UIAlertController(title: "정렬방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
-
-        let cancelAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction) in print("취소버튼 선택")})
-        
-        alertController.addAction(alertActionSetting(movieSortMode: .reservationRate))
-        alertController.addAction(alertActionSetting(movieSortMode: .quration))
-        alertController.addAction(alertActionSetting(movieSortMode: .open))
-        alertController.addAction(cancelAction)
-        
-        self.present(alertController, animated: true, completion: { print("Alert controller shown")})
-    }
-
-    private func alertActionSetting(movieSortMode: MovieSortMode) -> UIAlertAction {
-        let alertAction = UIAlertAction(title: movieSortMode.title, style: UIAlertAction.Style.default) { _ in
-            self.movieService.requestMovieList(movieSortMode: movieSortMode) { movies in
-                DispatchQueue.main.async {
-                    self.navigationItem.title = movieSortMode.title
-                    self.arrayMovies = movies
-                    self.movieListTableView?.reloadData()
-                }
-            }
-        }
-        return alertAction
-    }
-    
-    func setupView() {
-        self.navigationController?.navigationBar.barTintColor = .systemIndigo
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.tintColor = .white
     }
 }
 
@@ -112,7 +83,7 @@ extension MovieListTableViewController: UITableViewDataSource {
         }
         let imageData = self.viewModel.imageData
         
-        cell.setupUI(model: movieList[indexPath.row], thumbnailData: imageData[indexPath.row])
+        cell.setupUI(model: movieList[safe: indexPath.row], thumbnailData: imageData[safe: indexPath.row])
         
         return cell
     }

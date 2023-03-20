@@ -18,7 +18,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         
-        guard let navigationController = self.viewControllers?[self.selectedIndex] as? UINavigationController else { return }
+        guard let navigationController = self.viewControllers?[selectedIndex] as? UINavigationController else { return }
         navigationController.popToRootViewController(animated: false)
     }
 }

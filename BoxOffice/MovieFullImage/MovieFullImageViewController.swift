@@ -10,19 +10,23 @@ import UIKit
 
 class MovieFullImageViewController: UIViewController {
 
-    @IBOutlet var fullScreen: UIImageView!
+    @IBOutlet private var fullScreen: UIImageView!
      
      override func viewDidLoad() {
          super.viewDidLoad()
          
-         let tap = UITapGestureRecognizer()
-         tap.addTarget(self, action: #selector(tapScreen(_:)))
-         
-         fullScreen.isUserInteractionEnabled = true
-         fullScreen.addGestureRecognizer(tap)
-         
-         self.navigationController?.navigationBar.isHidden = true
+         setupView()
      }
+    
+    private func setupView() {
+        let tap = UITapGestureRecognizer()
+        tap.addTarget(self, action: #selector(tapScreen(_:)))
+        
+        fullScreen.isUserInteractionEnabled = true
+        fullScreen.addGestureRecognizer(tap)
+        
+        self.navigationController?.navigationBar.isHidden = true
+    }
     
      override var prefersStatusBarHidden: Bool {
          return true
