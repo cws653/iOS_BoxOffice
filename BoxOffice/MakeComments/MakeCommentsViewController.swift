@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MakeCommentsViewController: UIViewController {
+final class MakeCommentsViewController: UIViewController {
 
     private let movieServiceProvider = MovieServiceProvider.shared
     private let userInfo = UserDefaults.standard
