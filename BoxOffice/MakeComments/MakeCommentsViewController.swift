@@ -8,86 +8,78 @@
 
 import UIKit
 
-final class MakeCommentsViewController: UIViewController {
+protocol MakeCommentsViewDelegate: AnyObject {
+    func makeComment()
+}
 
-    private let movieServiceProvider = MovieServiceProvider.shared
-    private let userInfo = UserDefaults.standard
+final class MakeCommentsViewController: UIViewController, StoryboardBased {
+    static var storyboard: UIStoryboard {
+        UIStoryboard(name: "Main", bundle: nil)
+    }
+    
+    weak var delegate: MakeCommentsViewDelegate?
     var movies: Movies?
-
-    @IBOutlet weak var labelOfTitle: UILabel?
-    @IBOutlet weak var imageOfGrade: UIImageView?
-    @IBOutlet weak var contentsTextView: UITextView?
-    @IBOutlet weak var gradeOfLabel: UILabel?
-    @IBOutlet weak var sliderOfGrade: UISlider?
-    @IBOutlet weak var userIdTextField: UITextField?
-
-    @IBOutlet weak var firstStar: UIImageView?
-    @IBOutlet weak var secondStar: UIImageView?
-    @IBOutlet weak var thirdStar: UIImageView?
-    @IBOutlet weak var fourthStar: UIImageView?
-    @IBOutlet weak var fifthStar: UIImageView?
-
+    private let userInfo = UserDefaults.standard
+    private var finishButton: UIBarButtonItem {
+        let finishButton = UIBarButtonItem.init(title: "완료", style: UIBarButtonItem.Style.plain, target: self, action: #selector(makeComments(sender:)))
+        return finishButton
+    }
+    private var backButton: UIBarButtonItem {
+        let backButton = UIBarButtonItem.init(title: "취소", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
+        return backButton
+    }
+    
+    @IBOutlet private weak var labelOfTitle: UILabel?
+    @IBOutlet private weak var imageOfGrade: UIImageView?
+    @IBOutlet private weak var contentsTextView: UITextView?
+    @IBOutlet private weak var gradeOfLabel: UILabel?
+    @IBOutlet private weak var sliderOfGrade: UISlider?
+    @IBOutlet private weak var userIdTextField: UITextField?
+    @IBOutlet private weak var starView: Star?
+    
     
     // MARK: - view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.title = "한줄평 작성"
-        self.navigationController?.navigationBar.barTintColor = .systemIndigo
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
-        let finishButton = UIBarButtonItem.init(title: "완료", style: UIBarButtonItem.Style.plain, target: self, action: #selector(loadingComments(sender:)))
-        self.navigationItem.rightBarButtonItem = finishButton
-        
-        let backButton = UIBarButtonItem.init(title: "취소", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
-        navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
-
-        self.contentsTextView?.layer.borderWidth = 2.0
-        self.contentsTextView?.layer.borderColor = UIColor.systemOrange.cgColor
-        self.contentsTextView?.text = "내용을 입력해주세요."
-        self.contentsTextView?.textColor = UIColor.systemGray4
-        
-        let startPosition = contentsTextView?.beginningOfDocument
-        contentsTextView?.selectedTextRange = contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
-        
-        self.labelOfTitle?.text = movies?.title
-        
-        switch movies?.grade  {
-        case 0: imageOfGrade?.image = UIImage(named: "ic_allages")
-        case 12: imageOfGrade?.image = UIImage(named: "ic_12")
-        case 15: imageOfGrade?.image = UIImage(named: "ic_15")
-        case 19: imageOfGrade?.image = UIImage(named: "ic_19")
-        default: imageOfGrade?.image = nil
-        }
+        setupView()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let userId = userInfo.string(forKey: "userId")
+    
+    func setupView() {
+        self.title = "한줄평 작성"
+        self.navigationItem.rightBarButtonItem = self.finishButton
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = self.backButton
+        
+        guard let movie = self.movies else { return }
+        self.labelOfTitle?.text = movie.title
+        self.imageOfGrade?.image = Grade(rawValue: movie.grade)?.image
+        self.sliderOfGrade?.value = Float(movie.userRating)
+        self.gradeOfLabel?.text = String(movie.userRating)
+        self.starView?.setupView(rateValue: movie.userRating)
+        
+        let userId = self.userInfo.string(forKey: "userId")
         self.userIdTextField?.text = userId
     }
     
-    @objc func loadingComments(sender: UIBarButtonItem) {
+    @objc func makeComments(sender: UIBarButtonItem) {
         if self.isValidCheckButton() {
             self.userInfo.set(userIdTextField?.text, forKey: "userId")
-
+            
             guard let rating = Int(self.gradeOfLabel?.text ?? "0") else { return }
             guard let writer = self.userIdTextField?.text else { return }
-            guard let movie_id = self.movies?.id else { return }
+            guard let movieId = self.movies?.id else { return }
             guard let contents = self.contentsTextView?.text else { return }
-
-            let postCommentData = PostComment(rating: rating, writer: writer, movie_id: movie_id, contents: contents)
-            movieServiceProvider.postComment(postComment: postCommentData) {
+            
+            let postCommentData = PostComment(rating: rating, writer: writer, movie_id: movieId, contents: contents)
+            MovieServiceProvider.shared.postComment(postComment: postCommentData) {
                 DispatchQueue.main.async {
-                    if let movieDetailsViewController = self.navigationController?.viewControllers.filter({ $0 is MovieDetailsViewController }) {
-                        self.navigationController?.popViewController(animated: true)
-                    }
+                    self.delegate?.makeComment()
+                    self.navigationController?.popViewController(animated: true)
                 }
             }
         } else {
             let alertController = UIAlertController(title: "경고", message: "내용을 입력해주세요.", preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
         }
     }
     
@@ -102,84 +94,13 @@ final class MakeCommentsViewController: UIViewController {
         return true
     }
     
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
-        
-        switch round(sender.value) {
-        case 0:
-            firstStar?.image = UIImage(named: "ic_star_large")
-            secondStar?.image = UIImage(named: "ic_star_large")
-            thirdStar?.image = UIImage(named: "ic_star_large")
-            fourthStar?.image = UIImage(named: "ic_star_large")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 1.0:
-            firstStar?.image = UIImage(named: "ic_star_large_half")
-            secondStar?.image = UIImage(named: "ic_star_large")
-            thirdStar?.image = UIImage(named: "ic_star_large")
-            fourthStar?.image = UIImage(named: "ic_star_large")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 2.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large")
-            thirdStar?.image = UIImage(named: "ic_star_large")
-            fourthStar?.image = UIImage(named: "ic_star_large")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 3.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_half")
-            thirdStar?.image = UIImage(named: "ic_star_large")
-            fourthStar?.image = UIImage(named: "ic_star_large")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 4.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_full")
-            thirdStar?.image = UIImage(named: "ic_star_large")
-            fourthStar?.image = UIImage(named: "ic_star_large")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 5.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_full")
-            thirdStar?.image = UIImage(named: "ic_star_large_half")
-            fourthStar?.image = UIImage(named: "ic_star_large")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 6.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_full")
-            thirdStar?.image = UIImage(named: "ic_star_large_full")
-            fourthStar?.image = UIImage(named: "ic_star_large")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 7.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_full")
-            thirdStar?.image = UIImage(named: "ic_star_large_full")
-            fourthStar?.image = UIImage(named: "ic_star_large_half")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 8.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_full")
-            thirdStar?.image = UIImage(named: "ic_star_large_full")
-            fourthStar?.image = UIImage(named: "ic_star_large_full")
-            fifthStar?.image = UIImage(named: "ic_star_large")
-        case 9.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_full")
-            thirdStar?.image = UIImage(named: "ic_star_large_full")
-            fourthStar?.image = UIImage(named: "ic_star_large_full")
-            fifthStar?.image = UIImage(named: "ic_star_large_half")
-        case 10.0:
-            firstStar?.image = UIImage(named: "ic_star_large_full")
-            secondStar?.image = UIImage(named: "ic_star_large_full")
-            thirdStar?.image = UIImage(named: "ic_star_large_full")
-            fourthStar?.image = UIImage(named: "ic_star_large_full")
-            fifthStar?.image = UIImage(named: "ic_star_large_full")
-        default:
-            break
-        }
-        
-        self.gradeOfLabel?.text = String(Int(round(sender.value)))
+    @IBAction private func changeSlideValue(_ sender: UISlider) {
+        let rateValue = sender.value
+        self.starView?.setupView(rateValue: Double(rateValue))
+        self.gradeOfLabel?.text = String(Int(round(rateValue)))
         if sender.isTracking { return }
     }
 }
-
 
 // MARK: - UITableViewDelegate
 extension MakeCommentsViewController: UITableViewDelegate {
@@ -195,9 +116,9 @@ extension MakeCommentsViewController: UITableViewDelegate {
 // MARK: - UITextViewDelegate
 extension MakeCommentsViewController: UITextViewDelegate {
     func textViewDidChangeSelection(_ textView: UITextView) {
-        if contentsTextView?.textColor == UIColor.systemGray4 {
-            let startPosition = contentsTextView?.beginningOfDocument
-            contentsTextView?.selectedTextRange = contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
+        if self.contentsTextView?.textColor == UIColor.systemGray4 {
+            let startPosition = self.contentsTextView?.beginningOfDocument
+            self.contentsTextView?.selectedTextRange = self.contentsTextView?.textRange(from: startPosition ?? UITextPosition(), to: startPosition ?? UITextPosition())
         }
     }
     

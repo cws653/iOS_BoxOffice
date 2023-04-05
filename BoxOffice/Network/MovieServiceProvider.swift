@@ -36,7 +36,7 @@ class MovieServiceProvider {
         dataTask.resume()
     }
     
-    func getMovieDetails(movieId: String, completion:@escaping ([DetailContents]) -> Void) {
+    func getMovieDetails(movieId: String, completion:@escaping (DetailContents) -> Void) {
         let baseWithFilterTypeURL = baseURL+"movie?id="+"\(movieId)"
         guard let url = URL(string: baseWithFilterTypeURL) else {return}
         let session: URLSession = URLSession(configuration: .default)
@@ -48,7 +48,7 @@ class MovieServiceProvider {
             
             do {
                 let order = try JSONDecoder().decode(DetailContents.self, from: data)
-                completion([order])
+                completion(order)
             } catch {
                 print("JSON Parising Error")
             }

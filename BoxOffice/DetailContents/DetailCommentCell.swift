@@ -8,17 +8,17 @@
 
 import UIKit
 
-class DetailViewCommentCell: UITableViewCell {
+class DetailCommentCell: UITableViewCell, Reusable {
     
-    @IBOutlet weak var writer: UILabel?
-    @IBOutlet weak var timestamp: UILabel?
-    @IBOutlet weak var contents: UITextView?
+    @IBOutlet private weak var writer: UILabel?
+    @IBOutlet private weak var timestamp: UILabel?
+    @IBOutlet private weak var contents: UITextView?
+    @IBOutlet private weak var firstStar: UIImageView?
+    @IBOutlet private weak var secondStar: UIImageView?
+    @IBOutlet private weak var thirdStar: UIImageView?
+    @IBOutlet private weak var fourthStar: UIImageView?
+    @IBOutlet private weak var fifthStar: UIImageView?
     
-    @IBOutlet weak var firstStar: UIImageView?
-    @IBOutlet weak var secondStar: UIImageView?
-    @IBOutlet weak var thirdStar: UIImageView?
-    @IBOutlet weak var fourthStar: UIImageView?
-    @IBOutlet weak var fifthStar: UIImageView?
     
     internal func setUI(with comment: Comment) {
         let date = Date(timeIntervalSince1970: comment.timestamp)
