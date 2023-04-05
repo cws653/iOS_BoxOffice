@@ -8,13 +8,12 @@
 
 import UIKit
 
-class DetailViewCastCell: UITableViewCell {
+class DetailCastCell: UITableViewCell, Reusable {
 
-    @IBOutlet weak var directorLabel: UILabel?
-    @IBOutlet weak var actorLabel: UILabel?
+    @IBOutlet private weak var directorLabel: UILabel?
+    @IBOutlet private weak var actorLabel: UILabel?
     
     internal func setUI(with movie: DetailContents) {
-        
         self.directorLabel?.text = movie.director
         self.actorLabel?.text = movie.actor
     }

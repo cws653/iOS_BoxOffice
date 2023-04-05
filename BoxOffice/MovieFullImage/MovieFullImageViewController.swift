@@ -8,15 +8,22 @@
 
 import UIKit
 
-final class MovieFullImageViewController: UIViewController {
-
+final class MovieFullImageViewController: UIViewController, StoryboardBased {
+    static var storyboard: UIStoryboard {
+        UIStoryboard(name: "Main", bundle: nil)
+    }
+    
     @IBOutlet var fullScreen: UIImageView!
-     
-     override func viewDidLoad() {
-         super.viewDidLoad()
-         
-         setupView()
-     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupView()
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     private func setupView() {
         let tap = UITapGestureRecognizer()
@@ -28,12 +35,7 @@ final class MovieFullImageViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
     }
     
-     override var prefersStatusBarHidden: Bool {
-         return true
-     }
-     
-     // MARK:- TapScreen
-     @objc func tapScreen(_ sender: UITapGestureRecognizer) {
-         dismiss(animated: true, completion: nil)
-     }
+    @objc func tapScreen(_ sender: UITapGestureRecognizer) {
+        dismiss(animated: true, completion: nil)
+    }
 }
