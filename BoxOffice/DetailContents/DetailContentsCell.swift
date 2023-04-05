@@ -8,12 +8,11 @@
 
 import UIKit
 
-class DetailViewContentsCell: UITableViewCell {
+class DetailContentsCell: UITableViewCell, Reusable {
 
-    @IBOutlet weak var content: UITextView?
+    @IBOutlet private weak var content: UITextView?
 
     internal func setUI(with model: DetailContents) {
-        
         self.content?.text = model.synopsis
         self.content?.isScrollEnabled = false
         self.content?.isEditable = false

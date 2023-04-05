@@ -9,11 +9,11 @@
 import UIKit
 
 class MovieListCollectionViewCell: UICollectionViewCell, Reusable {
-    @IBOutlet weak var movieImageView: UIImageView?
-    @IBOutlet weak var gradeImageView: UIImageView?
-    @IBOutlet weak var movieTitleLabel: UILabel?
-    @IBOutlet weak var gradeAndRateLabel: UILabel?
-    @IBOutlet weak var openDateLabel: UILabel?
+    @IBOutlet private weak var movieImageView: UIImageView?
+    @IBOutlet private weak var gradeImageView: UIImageView?
+    @IBOutlet private weak var movieTitleLabel: UILabel?
+    @IBOutlet private weak var gradeAndRateLabel: UILabel?
+    @IBOutlet private weak var openDateLabel: UILabel?
 
     override func awakeFromNib() {
         super.awakeFromNib()
