@@ -13,25 +13,8 @@ class DetailCommentCell: UITableViewCell, Reusable {
     @IBOutlet private weak var writer: UILabel?
     @IBOutlet private weak var timestamp: UILabel?
     @IBOutlet private weak var contents: UITextView?
-    @IBOutlet private weak var firstStar: UIImageView?
-    @IBOutlet private weak var secondStar: UIImageView?
-    @IBOutlet private weak var thirdStar: UIImageView?
-    @IBOutlet private weak var fourthStar: UIImageView?
-    @IBOutlet private weak var fifthStar: UIImageView?
-    
-    
-    internal func setUI(with comment: Comment) {
-        let date = Date(timeIntervalSince1970: comment.timestamp)
-        let strDate = self.setDateFormatter().string(from: date)
-        
-        self.writer?.text = comment.writer
-        self.timestamp?.text = "\(strDate)"
-        self.contents?.text = comment.contents
-        
-        self.setImages(with: comment.rating)
-    }
-    
-    private func setDateFormatter() -> DateFormatter {
+    @IBOutlet private weak var starView: Star?
+    private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
         dateFormatter.locale = NSLocale.current
@@ -39,56 +22,19 @@ class DetailCommentCell: UITableViewCell, Reusable {
         return dateFormatter
     }
     
-    private func setImages(with rating: Double) {
-        let defaultStarImage = UIImage(named: "ic_star_large")
-        
-        self.firstStar?.image = nil
-        self.secondStar?.image = nil
-        self.thirdStar?.image = nil
-        self.fourthStar?.image = nil
-        self.fifthStar?.image = nil
-        
-        if let images = StarImageMaker.setStartImages(with: rating) {
-            self.firstStar?.image = images[safe: 0] ?? defaultStarImage
-            self.secondStar?.image = images[safe: 1] ?? defaultStarImage
-            self.thirdStar?.image = images[safe: 2] ?? defaultStarImage
-            self.fourthStar?.image = images[safe: 3] ?? defaultStarImage
-            self.fifthStar?.image = images[safe: 4] ?? defaultStarImage
-        }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.contents?.isScrollEnabled = false
+        self.contents?.isEditable = false
     }
-}
 
-struct StarImageMaker {
-    static func setStartImages(with inputValue: Double) -> [UIImage?]? {
-        let defaultStar = UIImage(named: "ic_star_large")
-        let halfStar = UIImage(named: "ic_star_large_half")
-        let fullStar = UIImage(named: "ic_star_large_full")
+    internal func setUI(with comment: Comment) {
+        let date = Date(timeIntervalSince1970: comment.timestamp)
+        let strDate = self.dateFormatter.string(from: date)
         
-        switch round(inputValue) {
-        case 0:
-            return [defaultStar, defaultStar, defaultStar, defaultStar, defaultStar]
-        case 1.0:
-            return [halfStar, defaultStar, defaultStar, defaultStar, defaultStar]
-        case 2.0:
-            return [defaultStar, defaultStar, defaultStar, defaultStar, defaultStar]
-        case 3.0:
-            return [defaultStar, halfStar, defaultStar, defaultStar, defaultStar]
-        case 4.0:
-            return [defaultStar, defaultStar, defaultStar, defaultStar, defaultStar]
-        case 5.0:
-            return [fullStar, fullStar, halfStar, defaultStar, defaultStar]
-        case 6.0:
-            return [fullStar, fullStar, fullStar, defaultStar, defaultStar]
-        case 7.0:
-            return [fullStar, fullStar, fullStar, halfStar, defaultStar]
-        case 8.0:
-            return [fullStar, fullStar, fullStar, fullStar, defaultStar]
-        case 9.0:
-            return [fullStar, fullStar, fullStar, fullStar, halfStar]
-        case 10.0:
-            return [fullStar, fullStar, fullStar, fullStar, fullStar]
-        default:
-            return nil
-        }
+        self.writer?.text = comment.writer
+        self.timestamp?.text = "\(strDate)"
+        self.contents?.text = comment.contents
+        self.starView?.setupView(rateValue: Double(comment.rating))
     }
 }
