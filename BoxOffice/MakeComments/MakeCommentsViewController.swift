@@ -29,11 +29,11 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
         return backButton
     }
     
-    @IBOutlet private weak var labelOfTitle: UILabel?
-    @IBOutlet private weak var imageOfGrade: UIImageView?
+    @IBOutlet private weak var titleLabel: UILabel?
+    @IBOutlet private weak var gradeImage: UIImageView?
     @IBOutlet private weak var contentsTextView: UITextView?
-    @IBOutlet private weak var gradeOfLabel: UILabel?
-    @IBOutlet private weak var sliderOfGrade: UISlider?
+    @IBOutlet private weak var gradeLabel: UILabel?
+    @IBOutlet private weak var gradeSlider: UISlider?
     @IBOutlet private weak var userIdTextField: UITextField?
     @IBOutlet private weak var starView: Star?
     
@@ -51,10 +51,10 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = self.backButton
         
         guard let movie = self.movies else { return }
-        self.labelOfTitle?.text = movie.title
-        self.imageOfGrade?.image = Grade(rawValue: movie.grade)?.image
-        self.sliderOfGrade?.value = Float(movie.userRating)
-        self.gradeOfLabel?.text = String(movie.userRating)
+        self.titleLabel?.text = movie.title
+        self.gradeImage?.image = Grade(rawValue: movie.grade)?.image
+        self.gradeSlider?.value = Float(movie.userRating)
+        self.gradeLabel?.text = String(round(movie.userRating))
         self.starView?.setupView(rateValue: movie.userRating)
         
         let userId = self.userInfo.string(forKey: "userId")
@@ -65,10 +65,10 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
         if self.isValidCheckButton() {
             self.userInfo.set(userIdTextField?.text, forKey: "userId")
             
-            guard let rating = Int(self.gradeOfLabel?.text ?? "0") else { return }
             guard let writer = self.userIdTextField?.text else { return }
             guard let movieId = self.movies?.id else { return }
             guard let contents = self.contentsTextView?.text else { return }
+            let rating = Int(round(self.gradeSlider?.value ?? 0))
             
             let postCommentData = PostComment(rating: rating, writer: writer, movie_id: movieId, contents: contents)
             MovieServiceProvider.shared.postComment(postComment: postCommentData) {
@@ -97,7 +97,7 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
     @IBAction private func changeSlideValue(_ sender: UISlider) {
         let rateValue = sender.value
         self.starView?.setupView(rateValue: Double(rateValue))
-        self.gradeOfLabel?.text = String(Int(round(rateValue)))
+        self.gradeLabel?.text = String(Int(round(rateValue)))
         if sender.isTracking { return }
     }
 }

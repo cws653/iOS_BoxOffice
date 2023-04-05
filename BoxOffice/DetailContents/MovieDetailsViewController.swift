@@ -37,19 +37,6 @@ final class MovieDetailsViewController: UIViewController, StoryboardBased {
                 self.movieDetailTableView?.reloadData()
             }
         }
-        
-        
-    }
-    
-    @objc func tapImage(tapGestureRecognizer: UITapGestureRecognizer)
-    {
-        guard let tappedImage = tapGestureRecognizer.view as? UIImageView else { return }
-        
-        guard let movieFullImageViewController = self.storyboard?.instantiateViewController(withIdentifier: "MovieFullImageVC") as? MovieFullImageViewController  else { return }
-        
-        self.present(movieFullImageViewController, animated: false) {
-            movieFullImageViewController.fullScreen.image = tappedImage.image
-        }
     }
 }
 
