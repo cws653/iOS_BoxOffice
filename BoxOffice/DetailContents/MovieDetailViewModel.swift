@@ -29,11 +29,9 @@ class MovieDetailViewModel {
     }
     
     func getImageData(from movie: Movies, completion:@escaping () -> Void) {
-        
         guard let imageURL = URL(string: movie.thumb) else {
             return
         }
-        
         MovieServiceProvider.shared.getMovieImageData(url: imageURL) { data in
             self.imageData = data
             completion()
@@ -46,14 +44,6 @@ class MovieDetailViewModel {
             completion()
         }
     }
-    
-    //        guard let movieId = movie?.id else { return }
-    //        self.movieService.getCommentList(movieId: movieId) { commenList in
-    //            DispatchQueue.main.async {
-    //                self.comments = commenList?.comments ?? []
-    //                self.movieDetailTableView?.reloadData()
-    //            }
-    //        }
 }
 
 
