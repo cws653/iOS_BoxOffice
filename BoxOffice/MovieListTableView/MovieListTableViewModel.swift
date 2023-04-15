@@ -13,13 +13,18 @@ final class MovieListTableViewModel {
     private(set) var movieList: [Movies]?
     private(set) var imageData: [Data] = []
     
+    let dispatchGroup = DispatchGroup()
+}
+
+extension MovieListTableViewModel {
     func getMovieList(movieMode: MovieSortMode, completion:@escaping () -> Void) {
-        MovieServiceProvider.shared.getMovieList(movieSortMode: movieMode) { movies in
-            DispatchQueue.main.async {
-                self.movieList = movies
-                self.getImageDatas(from: movies) {
-                    completion()
-                }
+        dispatchGroup.enter()
+        MovieServiceProvider.shared.getMovieList(movieSortMode: movieMode) { [weak self] movies in
+            guard let self = self else { return }
+            self.movieList = movies
+            self.getImageDatas(from: movies) {
+                self.dispatchGroup.leave()
+                completion()
             }
         }
     }

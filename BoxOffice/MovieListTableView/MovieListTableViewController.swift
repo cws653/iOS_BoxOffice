@@ -14,8 +14,11 @@ final class MovieListTableViewController: UIViewController {
     var sortMode: MovieSortMode? {
         didSet {
             self.viewModel.getMovieList(movieMode: self.sortMode ?? .reservationRate) {
-                self.navigationItem.title = self.sortMode?.title
-                self.movieListTableView?.reloadData()
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.navigationItem.title = self.sortMode?.title
+                    self.movieListTableView?.reloadData()
+                }
             }
         }
     }
