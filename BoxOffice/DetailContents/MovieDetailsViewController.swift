@@ -32,7 +32,8 @@ final class MovieDetailsViewController: UIViewController, StoryboardBased {
         
         guard let movie = self.movie else { return }
         self.title = movie.title
-        self.viewModel.getMovieInfo(movie: movie) {
+        self.viewModel.getMovieInfo(movie: movie) { [weak self] in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 self.movieDetailTableView?.reloadData()
             }
@@ -123,7 +124,8 @@ extension MovieDetailsViewController: DetailPosterCellDelegate {
 extension MovieDetailsViewController: MakeCommentsViewDelegate {
     func makeComment() {
         guard let movieID = self.movie?.id else { return }
-        self.viewModel.getComments(movieID: movieID) {
+        self.viewModel.getComments(movieID: movieID) { [weak self] in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 self.movieDetailTableView?.reloadData()
             }
