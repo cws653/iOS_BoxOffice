@@ -14,10 +14,17 @@ class MovieDetailViewModel {
     private(set) var imageData: Data?
     private(set) var comments: [Comment]?
     
+    let dispatchGroup = DispatchGroup()
+}
+
+extension MovieDetailViewModel {
     func getMovieInfo(movie: Movies, completion:@escaping () -> Void) {
-        MovieServiceProvider.shared.getMovieDetails(movieId: movie.id) { detailContent in
+        dispatchGroup.enter()
+        MovieServiceProvider.shared.getMovieDetails(movieId: movie.id) { [weak self] detailContent in
+            guard let self = self else { return }
             self.detailContents = detailContent
             self.getImageData(from: movie) {
+                self.dispatchGroup.leave()
                 completion()
             }
         }
@@ -45,5 +52,4 @@ class MovieDetailViewModel {
         }
     }
 }
-
 
