@@ -68,7 +68,7 @@ final class MovieListTableViewController: UIViewController {
 extension MovieListTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movieDetailViewController = MovieDetailsViewController.instantiate()
-        movieDetailViewController.movie = self.viewModel.movieList?[indexPath.row]
+        movieDetailViewController.initMovies(with: self.viewModel.movieList?[indexPath.row])
         self.navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }
