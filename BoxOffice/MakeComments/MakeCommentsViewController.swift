@@ -18,7 +18,6 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
     }
     
     weak var delegate: MakeCommentsViewDelegate?
-//    var movies: Movies?
     private let userInfo = UserDefaults.standard
     private var finishButton: UIBarButtonItem {
         let finishButton = UIBarButtonItem.init(title: "완료", style: UIBarButtonItem.Style.plain, target: self, action: #selector(makeComments(sender:)))
