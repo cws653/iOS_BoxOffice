@@ -2,7 +2,7 @@
 //  BoxOffice
 //  DetailViewContentsCell.swift
 //
-//  Created by 최원석 on 2020/09/12.
+//  Created by 최원석 on 2023/03/19.
 //  Copyright © 2020 최원석. All rights reserved.
 //
 

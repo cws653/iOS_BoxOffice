@@ -13,18 +13,25 @@ final class MovieListCollectionViewModel {
     private(set) var movieList: [Movies]?
     private(set) var imageData: [Data] = []
     
-    let dispatchGroup = DispatchGroup()
+    private let dispatchGroup = DispatchGroup()
+    private let provider = Provider()
 }
 
 extension MovieListCollectionViewModel {
-    func getMovieList(movieMode: MovieSortMode, completion:@escaping () -> Void) {
+    
+    func getMoviewList(movieMode: MovieSortMode, completion: @escaping () -> Void) {
         dispatchGroup.enter()
-        MovieServiceProvider.shared.getMovieList(movieSortMode: movieMode) { [weak self] movies in
-            guard let self = self else { return }
-            self.movieList = movies
-            self.getImageDatas(from: movies) {
-                self.dispatchGroup.leave()
-                completion()
+        let endPoint = APIEndpoints.getMovieList(movieSortType: movieMode)
+        self.provider.request(with: endPoint) { result in
+            switch result {
+            case .success(let movieList):
+                self.movieList = movieList.movies
+                self.getImageDatas(from: movieList.movies) {
+                    self.dispatchGroup.leave()
+                    completion()
+                }
+            case .failure(let error):
+                print(error)
             }
         }
     }
@@ -34,9 +41,13 @@ extension MovieListCollectionViewModel {
             guard let imageURL = URL(string: movie.thumb) else {
                 return
             }
-            
-            MovieServiceProvider.shared.getMovieImageData(url: imageURL) { data in
-                self.imageData.append(data)
+            self.provider.request(imageURL) { result in
+                switch result {
+                case .success(let data):
+                    self.imageData.append(data)
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
         completion()

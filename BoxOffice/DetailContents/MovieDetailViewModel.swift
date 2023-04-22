@@ -14,23 +14,29 @@ class MovieDetailViewModel {
     private(set) var imageData: Data?
     private(set) var comments: [Comment]?
     
-    let dispatchGroup = DispatchGroup()
+    private let dispatchGroup = DispatchGroup()
+    private let provider = Provider()
 }
 
 extension MovieDetailViewModel {
     func getMovieInfo(movie: Movies, completion:@escaping () -> Void) {
         dispatchGroup.enter()
-        MovieServiceProvider.shared.getMovieDetails(movieId: movie.id) { [weak self] detailContent in
-            guard let self = self else { return }
-            self.detailContents = detailContent
-            self.getImageData(from: movie) {
-                self.dispatchGroup.leave()
-                completion()
+        let movieID = movie.id
+        let endPoint = APIEndpoints.getMovieDetails(movieID: movieID)
+        self.provider.request(with: endPoint) { result in
+            switch result {
+            case .success(let detailContents):
+                self.detailContents = detailContents
+                self.getImageData(from: movie) {
+                    self.dispatchGroup.leave()
+                    completion()
+                }
+            case .failure(let error):
+                print(error)
             }
         }
         
-        MovieServiceProvider.shared.getCommentList(movieId: movie.id) { commentList in
-            self.comments = commentList?.comments
+        self.getComments(movieID: movie.id) {
             completion()
         }
     }
@@ -39,16 +45,28 @@ extension MovieDetailViewModel {
         guard let imageURL = URL(string: movie.thumb) else {
             return
         }
-        MovieServiceProvider.shared.getMovieImageData(url: imageURL) { data in
-            self.imageData = data
-            completion()
+        
+        self.provider.request(imageURL) { result in
+            switch result {
+            case .success(let data):
+                self.imageData = data
+                completion()
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     
     func getComments(movieID: String, completion:@escaping () -> Void) {
-        MovieServiceProvider.shared.getCommentList(movieId: movieID) { commentList in
-            self.comments = commentList?.comments
-            completion()
+        let endPoint = APIEndpoints.getCommentList(movieID: movieID)
+        self.provider.request(with: endPoint) { result in
+            switch result {
+            case .success(let commentList):
+                self.comments = commentList.comments
+                completion()
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }

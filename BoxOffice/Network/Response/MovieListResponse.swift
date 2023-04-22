@@ -10,7 +10,12 @@ import Foundation
 
 struct MovieList: Codable {
     let movies: [Movies]
-    let order_type: Int
+    let orderType: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case movies
+        case orderType = "order_type"
+    }
 }
 
 struct Movies: Codable {

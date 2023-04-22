@@ -2,7 +2,7 @@
 //  SecondTableViewController.swift
 //  BoxOffice
 //
-//  Created by 최원석 on 2020/09/01.
+//  Created by 최원석 on 2023/03/19.
 //  Copyright © 2020 최원석. All rights reserved.
 //
 
@@ -103,7 +103,7 @@ extension MovieDetailsViewController: DetailMakeCommentCellDelegate {
         if isSelected {
             let makeCommentsViewController = MakeCommentsViewController.instantiate()
             makeCommentsViewController.delegate = self
-            makeCommentsViewController.movies = self.movie
+            makeCommentsViewController.initialModel(movies: self.movie)
             self.navigationController?.pushViewController(makeCommentsViewController, animated: false)
         }
     }
