@@ -2,7 +2,7 @@
 //  CollectionViewController.swift
 //  BoxOffice
 //
-//  Created by 최원석 on 2020/08/30.
+//  Created by 최원석 on 2023/03/19.
 //  Copyright © 2020 최원석. All rights reserved.
 //
 
@@ -13,7 +13,7 @@ final class MovieListCollectionViewController: UIViewController {
     private var viewModel = MovieListCollectionViewModel()
     var sortMode: MovieSortMode? {
         didSet {
-            self.viewModel.getMovieList(movieMode: self.sortMode ?? .reservationRate) {
+            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.navigationItem.title = self.sortMode?.title
