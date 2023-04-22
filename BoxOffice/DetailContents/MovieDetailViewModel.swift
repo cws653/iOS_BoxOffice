@@ -13,12 +13,17 @@ class MovieDetailViewModel {
     private(set) var detailContents: DetailContents?
     private(set) var imageData: Data?
     private(set) var comments: [Comment]?
+    private(set) var movies: Movies?
     
     private let dispatchGroup = DispatchGroup()
     private let provider = Provider()
 }
 
 extension MovieDetailViewModel {
+    func setMovies(with movies: Movies) {
+        self.movies = movies
+    }
+    
     func getMovieInfo(movie: Movies, completion:@escaping () -> Void) {
         dispatchGroup.enter()
         let movieID = movie.id

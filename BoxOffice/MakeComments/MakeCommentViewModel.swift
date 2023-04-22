@@ -11,8 +11,7 @@ import Foundation
 class MakeCommentViewModel {
     
     private(set) var movies: Movies?
-    
-    let provider = Provider()
+    private let provider = Provider()
 }
 
 extension MakeCommentViewModel {

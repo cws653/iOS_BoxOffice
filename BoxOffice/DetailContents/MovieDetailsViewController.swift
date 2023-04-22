@@ -15,7 +15,7 @@ final class MovieDetailsViewController: UIViewController, StoryboardBased {
     
     private var viewModel = MovieDetailViewModel()
     private var tableSectionCounts: Int?
-    var movie: Movies?
+//    var movie: Movies?
     
     @IBOutlet private weak var movieDetailTableView: UITableView?
     
@@ -25,12 +25,17 @@ final class MovieDetailsViewController: UIViewController, StoryboardBased {
         setupView()
     }
     
+    func initMovies(with movies: Movies?) {
+        guard let movies = movies else { return }
+        self.viewModel.setMovies(with: movies)
+    }
+    
     private func setupView() {
         self.movieDetailTableView?.delegate = self
         self.movieDetailTableView?.dataSource = self        
         self.tableSectionCounts = 5
         
-        guard let movie = self.movie else { return }
+        guard let movie = self.viewModel.movies else { return }
         self.title = movie.title
         self.viewModel.getMovieInfo(movie: movie) { [weak self] in
             guard let self = self else { return }
@@ -103,7 +108,7 @@ extension MovieDetailsViewController: DetailMakeCommentCellDelegate {
         if isSelected {
             let makeCommentsViewController = MakeCommentsViewController.instantiate()
             makeCommentsViewController.delegate = self
-            makeCommentsViewController.initialModel(movies: self.movie)
+            makeCommentsViewController.initialModel(movies: self.viewModel.movies)
             self.navigationController?.pushViewController(makeCommentsViewController, animated: false)
         }
     }
@@ -123,7 +128,8 @@ extension MovieDetailsViewController: DetailPosterCellDelegate {
 
 extension MovieDetailsViewController: MakeCommentsViewDelegate {
     func makeComment() {
-        guard let movieID = self.movie?.id else { return }
+        guard let movie = self.viewModel.movies else { return }
+        let movieID = movie.id
         self.viewModel.getComments(movieID: movieID) { [weak self] in
             guard let self = self else { return }
             DispatchQueue.main.async {

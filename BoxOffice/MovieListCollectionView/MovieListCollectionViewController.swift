@@ -72,7 +72,7 @@ final class MovieListCollectionViewController: UIViewController {
 extension MovieListCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movieDetailViewController = MovieDetailsViewController.instantiate()
-        movieDetailViewController.movie = self.viewModel.movieList?[indexPath.row]
+        movieDetailViewController.initMovies(with: self.viewModel.movieList?[indexPath.row])
         self.navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }
