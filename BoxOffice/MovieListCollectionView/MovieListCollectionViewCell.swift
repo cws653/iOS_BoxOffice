@@ -29,7 +29,7 @@ class MovieListCollectionViewCell: UICollectionViewCell, Reusable {
         self.gradeImageView?.image = nil
     }
 
-    func setupUI(model: Movies?, thumbnailData: Data?) {
+    func configure(model: Movies?, thumbnailData: Data?) {
         guard let model = model, let thumbnailData = thumbnailData else { return }
         
         self.movieImageView?.image = UIImage(data: thumbnailData)

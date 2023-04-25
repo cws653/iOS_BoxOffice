@@ -73,13 +73,13 @@ extension MovieDetailsViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailPosterCell
             cell.delegate = self
             guard let model = self.viewModel.detailContents, let imageData = self.viewModel.imageData else { return UITableViewCell() }
-            cell.setupUI(model: model, imageData: imageData)
+            cell.configure(model: model, imageData: imageData)
             return cell
 
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailContentsCell
             guard let model = self.viewModel.detailContents else { return UITableViewCell() }
-            cell.setUI(with: model)
+            cell.configure(with: model)
             return cell
 
         } else if indexPath.section == 2 {
@@ -96,7 +96,7 @@ extension MovieDetailsViewController: UITableViewDataSource {
         } else {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailCommentCell
             guard let model = self.viewModel.comments?[safe: indexPath.row] else { return UITableViewCell() }
-            cell.setUI(with: model)
+            cell.configure(with: model)
             return cell
             
         }
@@ -120,7 +120,7 @@ extension MovieDetailsViewController: DetailPosterCellDelegate {
             let movieFullImageViewController = MovieFullImageViewController.instantiate()
             movieFullImageViewController.modalPresentationStyle = .fullScreen
             self.present(movieFullImageViewController, animated: false) {
-                movieFullImageViewController.fullScreen.image = image
+                movieFullImageViewController.configure(with: image)
             }
         }
     }

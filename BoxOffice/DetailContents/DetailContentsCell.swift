@@ -12,7 +12,7 @@ class DetailContentsCell: UITableViewCell, Reusable {
 
     @IBOutlet private weak var content: UITextView?
 
-    internal func setUI(with model: DetailContents) {
+    internal func configure(with model: DetailContents) {
         self.content?.text = model.synopsis
         self.content?.isScrollEnabled = false
         self.content?.isEditable = false

@@ -20,14 +20,12 @@ final class MovieListTableViewModel {
 extension MovieListTableViewModel {
     
     func getMoviewList(movieMode: MovieSortMode, completion: @escaping () -> Void) {
-        dispatchGroup.enter()
         let endPoint = APIEndpoints.getMovieList(movieSortType: movieMode)
         self.provider.request(with: endPoint) { result in
             switch result {
             case .success(let movieList):
                 self.movieList = movieList.movies
                 self.getImageDatas(from: movieList.movies) {
-                    self.dispatchGroup.leave()
                     completion()
                 }
             case .failure(let error):
@@ -38,18 +36,22 @@ extension MovieListTableViewModel {
     
     func getImageDatas(from movies: [Movies], completion:@escaping () -> Void) {
         movies.forEach { movie in
+            dispatchGroup.enter()
             guard let imageURL = URL(string: movie.thumb) else {
                 return
             }
-            self.provider.request(imageURL) { result in
+            self.provider.request(imageURL) { [weak self] result in
                 switch result {
                 case .success(let data):
-                    self.imageData.append(data)
+                    self?.imageData.append(data)
+                    self?.dispatchGroup.leave()
                 case .failure(let error):
                     print(error)
                 }
             }
         }
-        completion()
+        dispatchGroup.notify(queue: .main) {
+            completion()
+        }
     }
 }

@@ -28,7 +28,7 @@ class DetailCommentCell: UITableViewCell, Reusable {
         self.contents?.isEditable = false
     }
 
-    internal func setUI(with comment: Comment) {
+    internal func configure(with comment: Comment) {
         let date = Date(timeIntervalSince1970: comment.timestamp)
         let strDate = self.dateFormatter.string(from: date)
         

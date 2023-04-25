@@ -13,16 +13,14 @@ final class MovieListTableViewController: UIViewController {
     private var viewModel = MovieListTableViewModel()
     var sortMode: MovieSortMode? {
         didSet {
-            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.navigationItem.title = self.sortMode?.title
-                    self.movieListTableView?.reloadData()
-                }
+            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
+                guard let self = self else { return }
+                self.navigationItem.title = self.sortMode?.title
+                self.movieListTableView?.reloadData()
             }
         }
     }
-
+    
     @IBOutlet private weak var movieListTableView: UITableView?
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
         self.showAlertController(
@@ -37,13 +35,8 @@ final class MovieListTableViewController: UIViewController {
     // MARK: - view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        self.sortMode = .reservationRate
         
-//        guard let sortMode = self.sortMode else { return }
-//        self.viewModel.getMoviewList(movieMode: sortMode) {
-//
-//        }
+        self.sortMode = .reservationRate
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -91,7 +84,7 @@ extension MovieListTableViewController: UITableViewDataSource {
         }
         let imageData = self.viewModel.imageData
         
-        cell.setupUI(model: movieList[safe: indexPath.row], thumbnailData: imageData[safe: indexPath.row])
+        cell.configure(model: movieList[safe: indexPath.row], thumbnailData: imageData[safe: indexPath.row])
         
         return cell
     }
