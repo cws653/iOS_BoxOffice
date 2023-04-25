@@ -34,7 +34,7 @@ class DetailPosterCell: UITableViewCell, Reusable {
         self.movieImageView?.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    func setupUI(model: DetailContents, imageData: Data) {
+    func configure(model: DetailContents, imageData: Data) {
         self.movieImageView?.image = UIImage(data: imageData)
         self.movieTitleLabel?.text = model.title
         self.openDayLabel?.text = model.date

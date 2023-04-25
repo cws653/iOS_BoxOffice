@@ -13,7 +13,7 @@ final class MovieFullImageViewController: UIViewController, StoryboardBased {
         UIStoryboard(name: "Main", bundle: nil)
     }
     
-    @IBOutlet private var fullScreen: UIImageView!
+    @IBOutlet private var fullScreen: UIImageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,12 +25,16 @@ final class MovieFullImageViewController: UIViewController, StoryboardBased {
         return true
     }
     
+    func configure(with image: UIImage) {
+        self.fullScreen?.image = image
+    }
+    
     private func setupView() {
         let tap = UITapGestureRecognizer()
         tap.addTarget(self, action: #selector(tapScreen(_:)))
         
-        fullScreen.isUserInteractionEnabled = true
-        fullScreen.addGestureRecognizer(tap)
+        fullScreen?.isUserInteractionEnabled = true
+        fullScreen?.addGestureRecognizer(tap)
         
         self.navigationController?.navigationBar.isHidden = true
     }

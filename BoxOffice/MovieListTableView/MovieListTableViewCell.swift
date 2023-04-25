@@ -19,8 +19,7 @@ class MovieListTableViewCell: UITableViewCell, Reusable {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.thumbImageView?.image = nil
-        self.gradeImageView?.image = nil
+        self.setupView()
     }
     
     override func prepareForReuse() {
@@ -30,7 +29,12 @@ class MovieListTableViewCell: UITableViewCell, Reusable {
         self.gradeImageView?.image = nil
     }
     
-    func setupUI(model: Movies?, thumbnailData: Data?) {
+    private func setupView() {
+        self.thumbImageView?.image = nil
+        self.gradeImageView?.image = nil
+    }
+    
+    func configure(model: Movies?, thumbnailData: Data?) {
         guard let model = model, let thumbnailData = thumbnailData else { return }
         
         self.thumbImageView?.image = UIImage(data: thumbnailData)

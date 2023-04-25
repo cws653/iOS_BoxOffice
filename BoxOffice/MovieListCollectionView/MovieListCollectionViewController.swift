@@ -9,20 +9,18 @@
 import UIKit
 
 final class MovieListCollectionViewController: UIViewController {
-
+    
     private var viewModel = MovieListCollectionViewModel()
     var sortMode: MovieSortMode? {
         didSet {
-            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.navigationItem.title = self.sortMode?.title
-                    self.movieListCollectionView?.reloadData()
-                }
+            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
+                guard let self = self else { return }
+                self.navigationItem.title = self.sortMode?.title
+                self.movieListCollectionView?.reloadData()
             }
         }
     }
-
+    
     @IBOutlet private weak var movieListCollectionView: UICollectionView?
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
         self.showAlertController(
@@ -33,7 +31,7 @@ final class MovieListCollectionViewController: UIViewController {
             }
         )
     }
-
+    
     // MARK: - view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +57,6 @@ final class MovieListCollectionViewController: UIViewController {
     }
     
     private func setupView() {
-
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         layout.minimumInteritemSpacing = 10
@@ -96,18 +93,18 @@ extension MovieListCollectionViewController: UICollectionViewDataSource {
         }
         let imageData = self.viewModel.imageData
         
-        cell.setupUI(model: movieList[safe: indexPath.row] ?? nil, thumbnailData: imageData[safe: indexPath.row] ?? nil)
-
+        cell.configure(model: movieList[safe: indexPath.row] ?? nil, thumbnailData: imageData[safe: indexPath.row] ?? nil)
+        
         return cell
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension MovieListCollectionViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let targetSizeX: CGFloat = (collectionView.frame.width - 30) / 2
-
+        
         return CGSize(width: targetSizeX, height: 2 * targetSizeX)
     }
 }

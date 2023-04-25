@@ -13,7 +13,7 @@ class DetailCastCell: UITableViewCell, Reusable {
     @IBOutlet private weak var directorLabel: UILabel?
     @IBOutlet private weak var actorLabel: UILabel?
     
-    internal func setUI(with movie: DetailContents) {
+    internal func configure(with movie: DetailContents) {
         self.directorLabel?.text = movie.director
         self.actorLabel?.text = movie.actor
     }

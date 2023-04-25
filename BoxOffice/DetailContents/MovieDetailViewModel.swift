@@ -25,7 +25,6 @@ extension MovieDetailViewModel {
     }
     
     func getMovieInfo(movie: Movies, completion:@escaping () -> Void) {
-        dispatchGroup.enter()
         let movieID = movie.id
         let endPoint = APIEndpoints.getMovieDetails(movieID: movieID)
         self.provider.request(with: endPoint) { result in
@@ -33,7 +32,6 @@ extension MovieDetailViewModel {
             case .success(let detailContents):
                 self.detailContents = detailContents
                 self.getImageData(from: movie) {
-                    self.dispatchGroup.leave()
                     completion()
                 }
             case .failure(let error):
