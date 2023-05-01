@@ -13,8 +13,9 @@ class MakeCommentCoordinator: Coordinator {
     private var navigationController: UINavigationController
     private var makeCommentViewModel: MakeCommentViewModel?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, parent: Coordinator?) {
         self.navigationController = navigationController
+        self.parentCoordinator = parent
     }
     
     func start() {
