@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gUd-j1-gdk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -13,13 +13,13 @@
         <!--예매율-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MovieListTableViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MovieListTableViewController" id="BYZ-38-t0r" customClass="MovieListTableViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4bt-BG-hjy">
-                                <rect key="frame" x="0.0" y="92" width="414" height="721"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieListTableViewCell" id="8qW-4F-CKV" customClass="MovieListTableViewCell" customModule="BoxOffice" customModuleProvider="target">
@@ -658,13 +658,13 @@
         <!--예매율-->
         <scene sceneID="XkJ-xZ-fpa">
             <objects>
-                <viewController id="lE1-N5-emj" customClass="MovieListCollectionViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MovieListCollectionViewController" id="lE1-N5-emj" customClass="MovieListCollectionViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="veI-Gz-6Rg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ItF-Ut-3N6">
-                                <rect key="frame" x="0.0" y="92" width="414" height="721"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1s3-Iv-1oT">
                                     <size key="itemSize" width="313" height="439"/>
@@ -768,69 +768,10 @@
             </objects>
             <point key="canvasLocation" x="4597.1014492753629" y="868.52678571428567"/>
         </scene>
-        <!--Main Tab Bar Controller-->
-        <scene sceneID="c0L-34-gAJ">
-            <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="gUd-j1-gdk" customClass="MainTabBarController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="L9m-FR-KfJ">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="Kim-mk-XtS" kind="relationship" relationship="viewControllers" id="ThD-aq-u9Q"/>
-                        <segue destination="NOD-fg-2O5" kind="relationship" relationship="viewControllers" id="epQ-69-RZJ"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="i46-nG-k1p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2736" y="455"/>
-        </scene>
-        <!--tableview-->
-        <scene sceneID="XxO-6u-ie3">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Kim-mk-XtS" customClass="ReuseNavigationViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="tableview" image="ic_table" selectedImage="ic_table" id="Xeq-Je-G13"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="6MM-Bo-KTK">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="JaB-75-IGP"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9wD-FC-Rdj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3688.4057971014495" y="137.94642857142856"/>
-        </scene>
-        <!--CollectionView-->
-        <scene sceneID="EIM-fL-1NQ">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NOD-fg-2O5" customClass="ReuseNavigationViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="CollectionView" image="ic_collection" selectedImage="ic_collection" id="NeV-V3-lvO"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ME3-UC-ixX">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="lE1-N5-emj" kind="relationship" relationship="rootViewController" id="73f-Kf-caa"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DhJ-qN-GVW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3686.9565217391305" y="868.52678571428567"/>
-        </scene>
     </scenes>
     <resources>
         <image name="btn_compose" width="23" height="23"/>
-        <image name="ic_collection" width="25" height="25"/>
         <image name="ic_settings" width="24" height="24"/>
-        <image name="ic_table" width="24" height="24"/>
         <image name="ic_user_loading" width="36" height="36"/>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

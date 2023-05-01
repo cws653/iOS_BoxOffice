@@ -13,9 +13,10 @@ final class MovieDetailsViewController: UIViewController, StoryboardBased {
         UIStoryboard(name: "Main", bundle: nil)
     }
     
-    private var viewModel = MovieDetailViewModel()
+    var coordinator: MovieDetailCoordinator?
+    
+    var viewModel: MovieDetailViewModel?
     private var tableSectionCounts: Int?
-//    var movie: Movies?
     
     @IBOutlet private weak var movieDetailTableView: UITableView?
     
@@ -25,19 +26,14 @@ final class MovieDetailsViewController: UIViewController, StoryboardBased {
         setupView()
     }
     
-    func initMovies(with movies: Movies?) {
-        guard let movies = movies else { return }
-        self.viewModel.setMovies(with: movies)
-    }
-    
     private func setupView() {
         self.movieDetailTableView?.delegate = self
         self.movieDetailTableView?.dataSource = self        
         self.tableSectionCounts = 5
         
-        guard let movie = self.viewModel.movies else { return }
+        guard let movie = self.viewModel?.movie else { return }
         self.title = movie.title
-        self.viewModel.getMovieInfo(movie: movie) { [weak self] in
+        self.viewModel?.getMovieInfo(movie: movie) { [weak self] in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.movieDetailTableView?.reloadData()
@@ -62,7 +58,7 @@ extension MovieDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 4 {
-            return self.viewModel.comments?.count ?? 0
+            return self.viewModel?.comments?.count ?? 0
         } else {
             return 1
         }
@@ -72,19 +68,19 @@ extension MovieDetailsViewController: UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailPosterCell
             cell.delegate = self
-            guard let model = self.viewModel.detailContents, let imageData = self.viewModel.imageData else { return UITableViewCell() }
+            guard let model = self.viewModel?.detailContents, let imageData = self.viewModel?.imageData else { return UITableViewCell() }
             cell.configure(model: model, imageData: imageData)
             return cell
 
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailContentsCell
-            guard let model = self.viewModel.detailContents else { return UITableViewCell() }
+            guard let model = self.viewModel?.detailContents else { return UITableViewCell() }
             cell.configure(with: model)
             return cell
 
         } else if indexPath.section == 2 {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailCastCell
-            guard let model = self.viewModel.detailContents else { return UITableViewCell() }
+            guard let model = self.viewModel?.detailContents else { return UITableViewCell() }
             cell.configure(with: model)
             return cell
             
@@ -95,7 +91,7 @@ extension MovieDetailsViewController: UITableViewDataSource {
             
         } else {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailCommentCell
-            guard let model = self.viewModel.comments?[safe: indexPath.row] else { return UITableViewCell() }
+            guard let model = self.viewModel?.comments?[safe: indexPath.row] else { return UITableViewCell() }
             cell.configure(with: model)
             return cell
             
@@ -106,10 +102,7 @@ extension MovieDetailsViewController: UITableViewDataSource {
 extension MovieDetailsViewController: DetailMakeCommentCellDelegate {
     func makeDetailComment(isSelected: Bool) {
         if isSelected {
-            let makeCommentsViewController = MakeCommentsViewController.instantiate()
-            makeCommentsViewController.delegate = self
-            makeCommentsViewController.initialModel(movies: self.viewModel.movies)
-            self.navigationController?.pushViewController(makeCommentsViewController, animated: false)
+            self.coordinator?.coordinateToMakeComment()
         }
     }
 }
@@ -117,20 +110,16 @@ extension MovieDetailsViewController: DetailMakeCommentCellDelegate {
 extension MovieDetailsViewController: DetailPosterCellDelegate {
     func makeFullImage(isSelected: Bool, image: UIImage) {
         if isSelected {
-            let movieFullImageViewController = MovieFullImageViewController.instantiate()
-            movieFullImageViewController.modalPresentationStyle = .fullScreen
-            self.present(movieFullImageViewController, animated: false) {
-                movieFullImageViewController.configure(with: image)
-            }
+            self.coordinator?.coordinateToFullImage(image: image)
         }
     }
 }
 
 extension MovieDetailsViewController: MakeCommentsViewDelegate {
     func makeComment() {
-        guard let movie = self.viewModel.movies else { return }
+        guard let movie = self.viewModel?.movie else { return }
         let movieID = movie.id
-        self.viewModel.getComments(movieID: movieID) { [weak self] in
+        self.viewModel?.getComments(movieID: movieID) { [weak self] in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.movieDetailTableView?.reloadData()

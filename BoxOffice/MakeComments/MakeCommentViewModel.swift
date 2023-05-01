@@ -10,14 +10,18 @@ import Foundation
 
 class MakeCommentViewModel {
     
-    private(set) var movies: Movies?
+    private(set) var movie: Movies
     private let provider = Provider()
+    
+    init(movie: Movies) {
+        self.movie = movie
+    }
 }
 
 extension MakeCommentViewModel {
     
     func initMovies(movies: Movies) {
-        self.movies = movies
+        self.movie = movies
     }
     
     func postComment(request: PostMovieCommentRequest, completion: @escaping () -> Void) {

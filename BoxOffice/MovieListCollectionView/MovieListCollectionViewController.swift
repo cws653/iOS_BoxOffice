@@ -8,12 +8,17 @@
 
 import UIKit
 
-final class MovieListCollectionViewController: UIViewController {
+final class MovieListCollectionViewController: UIViewController, StoryboardBased {
+    static var storyboard: UIStoryboard {
+        UIStoryboard(name: "Main", bundle: nil)
+    }
     
-    private var viewModel = MovieListCollectionViewModel()
+    var coordinator: MovieCollectionCoordinator?
+    
+    var viewModel: MovieListCollectionViewModel?
     var sortMode: MovieSortMode? {
         didSet {
-            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
+            self.viewModel?.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
                 guard let self = self else { return }
                 self.navigationItem.title = self.sortMode?.title
                 self.movieListCollectionView?.reloadData()
@@ -68,9 +73,7 @@ final class MovieListCollectionViewController: UIViewController {
 // MARK: - UICollectionViewDelegate
 extension MovieListCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let movieDetailViewController = MovieDetailsViewController.instantiate()
-        movieDetailViewController.initMovies(with: self.viewModel.movieList?[indexPath.row])
-        self.navigationController?.pushViewController(movieDetailViewController, animated: true)
+        self.coordinator?.coordinateToDetail(indexPath: indexPath)
     }
 }
 
@@ -82,18 +85,18 @@ extension MovieListCollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.movieList?.count ?? 0
+        return self.viewModel?.movieList?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(for: indexPath) as MovieListCollectionViewCell
         
-        guard let movieList = self.viewModel.movieList else {
+        guard let movieList = self.viewModel?.movieList else {
             return UICollectionViewCell()
         }
-        let imageData = self.viewModel.imageData
+        let imageData = self.viewModel?.imageData
         
-        cell.configure(model: movieList[safe: indexPath.row] ?? nil, thumbnailData: imageData[safe: indexPath.row] ?? nil)
+        cell.configure(model: movieList[safe: indexPath.row] ?? nil, thumbnailData: imageData?[safe: indexPath.row] ?? nil)
         
         return cell
     }

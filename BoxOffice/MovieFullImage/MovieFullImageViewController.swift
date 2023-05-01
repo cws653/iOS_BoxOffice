@@ -13,19 +13,23 @@ final class MovieFullImageViewController: UIViewController, StoryboardBased {
         UIStoryboard(name: "Main", bundle: nil)
     }
     
+    var viewModel: MovieFullImageViewModel?
+    
     @IBOutlet private var fullScreen: UIImageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
+        configure()
     }
     
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    func configure(with image: UIImage) {
+    func configure() {
+        guard let image = self.viewModel?.fullImage else { return }
         self.fullScreen?.image = image
     }
     
