@@ -8,12 +8,16 @@
 
 import UIKit
 
-final class MovieListTableViewController: UIViewController {
+final class MovieListTableViewController: UIViewController, StoryboardBased {
+    static var storyboard: UIStoryboard {
+        UIStoryboard(name: "Main", bundle: nil)
+    }
     
-    private var viewModel = MovieListTableViewModel()
+    var coordinator: MovieTableCoordinator?
+    var viewModel: MovieListTableViewModel?
     var sortMode: MovieSortMode? {
         didSet {
-            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
+            self.viewModel?.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
                 guard let self = self else { return }
                 self.navigationItem.title = self.sortMode?.title
                 self.movieListTableView?.reloadData()
@@ -60,9 +64,7 @@ final class MovieListTableViewController: UIViewController {
 // MARK: - UITableViewDelegeate
 extension MovieListTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let movieDetailViewController = MovieDetailsViewController.instantiate()
-        movieDetailViewController.initMovies(with: self.viewModel.movieList?[indexPath.row])
-        self.navigationController?.pushViewController(movieDetailViewController, animated: true)
+        self.coordinator?.coordinateToDetail(indexPath: indexPath)
     }
 }
 
@@ -73,18 +75,18 @@ extension MovieListTableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.movieList?.count ?? 0
+        return self.viewModel?.movieList?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(for: indexPath) as MovieListTableViewCell
-        guard let movieList = self.viewModel.movieList else {
+        guard let movieList = self.viewModel?.movieList else {
             return UITableViewCell()
         }
-        let imageData = self.viewModel.imageData
+        let imageData = self.viewModel?.imageData
         
-        cell.configure(model: movieList[safe: indexPath.row], thumbnailData: imageData[safe: indexPath.row])
+        cell.configure(model: movieList[safe: indexPath.row], thumbnailData: imageData?[safe: indexPath.row])
         
         return cell
     }
