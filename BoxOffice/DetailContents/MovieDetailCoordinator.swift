@@ -12,6 +12,7 @@ class MovieDetailCoordinator: Coordinator {
     var parentCoordinator: Coordinator?
     private var navigationController: UINavigationController
     private var movieDetailViewModel: MovieDetailViewModel?
+    var movieDetailViewController: MovieDetailsViewController?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -19,6 +20,7 @@ class MovieDetailCoordinator: Coordinator {
     
     func start() {
         let movieDetailViewController = MovieDetailsViewController.instantiate()
+        self.movieDetailViewController = movieDetailViewController
         movieDetailViewController.coordinator = self
         movieDetailViewController.viewModel = self.movieDetailViewModel
         
@@ -27,9 +29,10 @@ class MovieDetailCoordinator: Coordinator {
     
     func coordinateToMakeComment() {
         guard let movie = movieDetailViewModel?.movie else { return }
-        let makeCommentCoordinator =  MakeCommentCoordinator(navigationController: navigationController)
-        makeCommentCoordinator.makeCommentViewModel(movie: movie)
-        makeCommentCoordinator.start()
+        let makeCommentViewController = MakeCommentsViewController.instantiate()
+        makeCommentViewController.delegate = movieDetailViewController
+        makeCommentViewController.viewModel = MakeCommentViewModel(movie: movie)
+        navigationController.pushViewController(makeCommentViewController, animated: false)
     }
     
     func coordinateToFullImage(image: UIImage) {
