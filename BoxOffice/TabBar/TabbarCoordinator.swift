@@ -43,11 +43,11 @@ class TabBarCoordinator: Coordinator {
     }
     
     private func getControllers() -> [UIViewController] {
-        let movieTableNavigationController = UINavigationController()
-        movieTableNavigationController.tabBarItem = UITabBarItem(title: "Table", image: UIImage(named: "magnifyingglass"), tag: 0)
+        let movieTableNavigationController = ReuseNavigationViewController()
+        movieTableNavigationController.tabBarItem = UITabBarItem(title: "TableView", image: UIImage(named: "ic_table"), tag: 0)
         
-        let movieCollectionNavigationController = UINavigationController()
-        movieCollectionNavigationController.tabBarItem = UITabBarItem(title: "Collection", image: UIImage(named: "magnifyingglass"), tag: 0)
+        let movieCollectionNavigationController = ReuseNavigationViewController()
+        movieCollectionNavigationController.tabBarItem = UITabBarItem(title: "CollectionView", image: UIImage(named: "ic_collection"), tag: 1)
         
         let controllerList = [movieTableNavigationController, movieCollectionNavigationController]
         
