@@ -8,10 +8,18 @@
 
 import UIKit
 
-class MovieDetailCoordinator: Coordinator {
+protocol MovieDetailFlow {
+    func coordinateToMakeComment()
+    func coordinateToFullImage(image: UIImage)
+    func makeMovieDetailViewModel(with movie: Movies)
+}
+
+class MovieDetailCoordinator: Coordinator, MovieDetailFlow {
+
     var parentCoordinator: Coordinator?
     private var navigationController: UINavigationController
     private var movieDetailViewModel: MovieDetailViewModel?
+    weak var makeCommentDelegate: MakeCommentsViewDelegate?
     var movieDetailViewController: MovieDetailsViewController?
     
     init(navigationController: UINavigationController) {
@@ -23,25 +31,26 @@ class MovieDetailCoordinator: Coordinator {
         self.movieDetailViewController = movieDetailViewController
         movieDetailViewController.coordinator = self
         movieDetailViewController.viewModel = self.movieDetailViewModel
+        makeCommentDelegate = movieDetailViewController
         
         navigationController.pushViewController(movieDetailViewController, animated: true)
     }
     
     func coordinateToMakeComment() {
         guard let movie = movieDetailViewModel?.movie else { return }
-        let makeCommentViewController = MakeCommentsViewController.instantiate()
-        makeCommentViewController.delegate = movieDetailViewController
-        makeCommentViewController.viewModel = MakeCommentViewModel(movie: movie)
-        navigationController.pushViewController(makeCommentViewController, animated: false)
+        let makeCommentCoordinator = MakeCommentCoordinator(navigationController: navigationController)
+        makeCommentCoordinator.makeCommentViewDelegate = self.makeCommentDelegate
+        makeCommentCoordinator.makeCommentViewModel(with: movie)
+        makeCommentCoordinator.start()
     }
     
     func coordinateToFullImage(image: UIImage) {
         let movieFullImageCoordinator = MovieFullImageCoordinator(navigationController: navigationController)
-        movieFullImageCoordinator.makeMovieFullImageViewModel(image: image)
+        movieFullImageCoordinator.makeMoviewFullImageViewModel(with: image)
         movieFullImageCoordinator.start()
     }
     
-    func makeMovieDetailViewModel(movie: Movies) {
+    func makeMovieDetailViewModel(with movie: Movies) {
         self.movieDetailViewModel = MovieDetailViewModel(movie: movie)
     }
 }

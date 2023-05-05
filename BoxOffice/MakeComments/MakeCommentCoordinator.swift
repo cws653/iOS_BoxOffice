@@ -8,23 +8,28 @@
 
 import UIKit
 
-class MakeCommentCoordinator: Coordinator {
+protocol makeCommentFlow: AnyObject {
+    func makeCommentViewModel(with movie: Movies)
+}
+
+class MakeCommentCoordinator: Coordinator, makeCommentFlow {
     var parentCoordinator: Coordinator?
     private var navigationController: UINavigationController
     private var makeCommentViewModel: MakeCommentViewModel?
+    weak var makeCommentViewDelegate: MakeCommentsViewDelegate?
     
-    init(navigationController: UINavigationController, parent: Coordinator?) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.parentCoordinator = parent
     }
     
     func start() {
         let makeCommentViewController = MakeCommentsViewController.instantiate()
         makeCommentViewController.viewModel = self.makeCommentViewModel
+        makeCommentViewController.delegate = self.makeCommentViewDelegate
         navigationController.pushViewController(makeCommentViewController, animated: false)
     }
     
-    func makeCommentViewModel(movie: Movies) {
+    func makeCommentViewModel(with movie: Movies) {
         self.makeCommentViewModel = MakeCommentViewModel(movie: movie)
     }
 }

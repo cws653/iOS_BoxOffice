@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieCollectionCoordinator: Coordinator {
+class MovieCollectionCoordinator: Coordinator, MovieListFlow {
     var parentCoordinator: Coordinator?
     private var navigationController: UINavigationController
     private var movieCollectionViewModel = MovieListCollectionViewModel()
@@ -28,7 +28,7 @@ class MovieCollectionCoordinator: Coordinator {
     func coordinateToDetail(indexPath: IndexPath) {
         guard let movie = movieCollectionViewModel.movieList?[indexPath.row] else { return }
         let movieDetailCoordinator = MovieDetailCoordinator(navigationController: navigationController)
-        movieDetailCoordinator.makeMovieDetailViewModel(movie: movie)
+        movieDetailCoordinator.makeMovieDetailViewModel(with: movie)
         movieDetailCoordinator.start()
     }
 }
