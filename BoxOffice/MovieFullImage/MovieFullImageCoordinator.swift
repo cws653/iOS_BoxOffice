@@ -8,7 +8,11 @@
 
 import UIKit
 
-class MovieFullImageCoordinator: Coordinator {
+protocol MovieFullImageFlow: AnyObject {
+    func makeMoviewFullImageViewModel(with image: UIImage)
+}
+
+class MovieFullImageCoordinator: Coordinator, MovieFullImageFlow {
     var parentCoordinator: Coordinator?
     private var navigationController: UINavigationController
     private var movieFullImageViewModel: MovieFullImageViewModel?
@@ -24,7 +28,8 @@ class MovieFullImageCoordinator: Coordinator {
         navigationController.present(movieFullImageViewController, animated: false)
     }
     
-    func makeMovieFullImageViewModel(image: UIImage) {
+    func makeMoviewFullImageViewModel(with image: UIImage) {
         self.movieFullImageViewModel = MovieFullImageViewModel(fullImage: image)
     }
+    
 }
