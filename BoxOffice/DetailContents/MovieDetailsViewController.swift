@@ -79,7 +79,7 @@ extension MovieDetailsViewController: UITableViewDataSource {
         } else if indexPath.section == 2 {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailCastCell
             guard let model = self.viewModel.detailContents else { return UITableViewCell() }
-            cell.setUI(with: model)
+            cell.configure(with: model)
             return cell
             
         } else if indexPath.section == 3 {
