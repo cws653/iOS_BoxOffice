@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+<<<<<<< HEAD
 		84CED90059798066CF00A45D /* Pods_BoxOffice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4638C9192ADAE68583D69B70 /* Pods_BoxOffice.framework */; };
+=======
+>>>>>>> step3
 		9D02ECD229F3739000356DE2 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D02ECD129F3739000356DE2 /* Provider.swift */; };
 		9D02ECD429F3CBE400356DE2 /* MovieRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D02ECD329F3CBE400356DE2 /* MovieRequest.swift */; };
 		9D03043D250CB5680095E4F2 /* DetailPosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D03043C250CB5680095E4F2 /* DetailPosterCell.swift */; };
@@ -59,9 +62,12 @@
 /* Begin PBXFileReference section */
 		9D02ECD129F3739000356DE2 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		9D02ECD329F3CBE400356DE2 /* MovieRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRequest.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		4638C9192ADAE68583D69B70 /* Pods_BoxOffice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BoxOffice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		766C430270F56D6BC8B81BCF /* Pods-BoxOffice.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoxOffice.release.xcconfig"; path = "Target Support Files/Pods-BoxOffice/Pods-BoxOffice.release.xcconfig"; sourceTree = "<group>"; };
 		861510FCA22D24A73D5C61F3 /* Pods-BoxOffice.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoxOffice.debug.xcconfig"; path = "Target Support Files/Pods-BoxOffice/Pods-BoxOffice.debug.xcconfig"; sourceTree = "<group>"; };
+=======
+>>>>>>> step3
 		9D03043C250CB5680095E4F2 /* DetailPosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPosterCell.swift; sourceTree = "<group>"; };
 		9D03043E250CB58C0095E4F2 /* DetailContentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailContentsCell.swift; sourceTree = "<group>"; };
 		9D030440250CB5B70095E4F2 /* DetailCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentCell.swift; sourceTree = "<group>"; };
@@ -122,6 +128,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+<<<<<<< HEAD
 		727D25241B3A9B0C9260ED00 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +137,8 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+=======
+>>>>>>> step3
 		9D02ECD029F3735600356DE2 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
