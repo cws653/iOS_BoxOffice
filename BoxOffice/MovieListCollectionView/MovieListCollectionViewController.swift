@@ -51,7 +51,7 @@ final class MovieListCollectionViewController: UIViewController {
         super.viewDidDisappear(animated)
         if let navigationController = self.tabBarController?.viewControllers?[safe: 0] as? UINavigationController {
             if let movieListTableViewController = navigationController.viewControllers.first as? MovieListTableViewController {
-                movieListTableViewController.sortMode = self.sortMode
+//                movieListTableViewController.sortMode = self.sortMode
             }
         }
     }

@@ -28,9 +28,10 @@ struct Movies: Codable {
     let userRating: Double
     let date: String
     let id: String
+    let imageData: Data?
     
     enum CodingKeys: String, CodingKey {
-        case grade, thumb, date, id, title
+        case grade, thumb, date, id, title, imageData
         case reservationGrade = "reservation_grade"
         case reservationRate = "reservation_rate"
         case userRating = "user_rating"

@@ -7,12 +7,45 @@
 //
 
 import Foundation
+import RxSwift
 
 final class Provider: ProviderLogic {
     let session: URLSessionable
     
     init(session: URLSessionable = URLSession.shared) {
         self.session = session
+    }
+    
+    func reqeustRx<R: Decodable, E: RequestResponsable>(with endPoint: E) -> Observable<R> where E.Response == R {
+        return Observable.create() { [weak self] emitter in
+            
+            self?.request(with: endPoint) { result in
+                switch result {
+                case .success(let data):
+                    emitter.onNext(data)
+                    emitter.onCompleted()
+                case .failure(let err):
+                    emitter.onError(err)
+                }
+            }
+            return Disposables.create()
+        }
+    }
+    
+    func requestRx(with url: URL) -> Observable<Data>  {
+        return Observable.create() { [weak self] emitter in
+            
+            self?.request(url, completion: { result in
+                switch result {
+                case .success(let data):
+                    emitter.onNext(data)
+                    emitter.onCompleted()
+                case .failure(let err):
+                    emitter.onError(err)
+                }
+            })
+            return Disposables.create()
+        }
     }
     
     func request<R: Decodable, E: RequestResponsable>(with endpoint: E, completion: @escaping (Result<R, Error>) -> Void) where E.Response == R {
