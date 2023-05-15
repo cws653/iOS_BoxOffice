@@ -34,11 +34,10 @@ class MovieListTableViewCell: UITableViewCell, Reusable {
         self.gradeImageView?.image = nil
     }
     
-    func configure(model: Movies?, thumbnailData: Data?) {
-//        guard let model = model, let thumbnailData = thumbnailData else { return }
-        guard let model = model else { return }
+    func configure(model: Movies?) {
+        guard let model = model, let url = URL(string: model.thumb) else { return }
         
-        self.thumbImageView?.image = UIImage(data: thumbnailData ?? Data())
+        self.thumbImageView?.load(url: url)
         self.gradeImageView?.image = Grade(rawValue: model.grade)?.image
         self.titleLabel?.text = model.title
         self.rateLabel?.text = "예매율: " + String(model.reservationRate) + " " + "예매순위: " + String(model.reservationGrade) + " " + String(model.userRating)

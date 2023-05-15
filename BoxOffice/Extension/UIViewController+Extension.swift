@@ -9,26 +9,26 @@
 import UIKit
 
 extension UIViewController {
-    func showAlertController(title: String, message: String, sortActionHandler: ((MovieSortMode) -> Void)? = nil, cancelActionTitle: String = "취소", cancelActionHandler: (() -> Void)? = nil) {
+    func showAlertController(title: String, message: String, sortActionHandler: ((MovieSortType) -> Void)? = nil, cancelActionTitle: String = "취소", cancelActionHandler: (() -> Void)? = nil) {
         let alertController: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         
-        let sortActionByReservationRate: UIAlertAction = UIAlertAction(title: MovieSortMode.reservationRate.title, style: .default) { _ in
+        let sortActionByReservationRate: UIAlertAction = UIAlertAction(title: MovieSortType.reservationRate.title, style: .default) { _ in
             if let sortActionHandler = sortActionHandler {
-                sortActionHandler(MovieSortMode.reservationRate)
+                sortActionHandler(MovieSortType.reservationRate)
             }
         }
         alertController.addAction(sortActionByReservationRate)
         
-        let sortActionByQuration: UIAlertAction = UIAlertAction(title: MovieSortMode.quration.title, style: .default) { _ in
+        let sortActionByQuration: UIAlertAction = UIAlertAction(title: MovieSortType.quration.title, style: .default) { _ in
             if let sortActionHandler = sortActionHandler {
-                sortActionHandler(MovieSortMode.quration)
+                sortActionHandler(MovieSortType.quration)
             }
         }
         alertController.addAction(sortActionByQuration)
         
-        let sortActionByOpen: UIAlertAction = UIAlertAction(title: MovieSortMode.open.title, style: .default) { _ in
+        let sortActionByOpen: UIAlertAction = UIAlertAction(title: MovieSortType.open.title, style: .default) { _ in
             if let sortActionHandler = sortActionHandler {
-                sortActionHandler(MovieSortMode.open)
+                sortActionHandler(MovieSortType.open)
             }
         }
         alertController.addAction(sortActionByOpen)

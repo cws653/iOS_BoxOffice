@@ -23,7 +23,6 @@ final class Provider: ProviderLogic {
                 switch result {
                 case .success(let data):
                     emitter.onNext(data)
-                    emitter.onCompleted()
                 case .failure(let err):
                     emitter.onError(err)
                 }
@@ -39,7 +38,6 @@ final class Provider: ProviderLogic {
                 switch result {
                 case .success(let data):
                     emitter.onNext(data)
-                    emitter.onCompleted()
                 case .failure(let err):
                     emitter.onError(err)
                 }
@@ -49,7 +47,7 @@ final class Provider: ProviderLogic {
     }
     
     func request<R: Decodable, E: RequestResponsable>(with endpoint: E, completion: @escaping (Result<R, Error>) -> Void) where E.Response == R {
-        
+        // endpoint로 부터 Reponse 타입 전달 받음
         do {
             let urlRequest = try endpoint.getUrlRequest()
             

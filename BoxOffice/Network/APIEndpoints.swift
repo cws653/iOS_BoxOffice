@@ -9,7 +9,7 @@
 import Foundation
 
 struct APIEndpoints {
-    static func getMovieList(movieSortType: MovieSortMode) -> EndPoint<MovieList> {
+    static func getMovieList(movieSortType: MovieSortType) -> EndPoint<MovieList> {
         return EndPoint(path: "movies",
                         method: .get,
                         queryParameters: GetMovieListRequest(orderType: movieSortType.rawValue)

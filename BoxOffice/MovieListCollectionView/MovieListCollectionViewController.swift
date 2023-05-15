@@ -7,27 +7,22 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import RxViewController
 
 final class MovieListCollectionViewController: UIViewController {
     
-    private var viewModel = MovieListCollectionViewModel()
-    var sortMode: MovieSortMode? {
-        didSet {
-            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
-                guard let self = self else { return }
-                self.navigationItem.title = self.sortMode?.title
-                self.movieListCollectionView?.reloadData()
-            }
-        }
-    }
+    private var disposeBag = DisposeBag()
+    var viewModel = MovieListCollectionViewModel()
     
-    @IBOutlet private weak var movieListCollectionView: UICollectionView?
+    @IBOutlet private weak var movieListCollectionView: UICollectionView!
     @IBAction private func navigationItemAction(_ sender: UIBarButtonItem) {
         self.showAlertController(
             title: "정렬방식 선택",
             message: "영화를 어떤 순서로 정렬할까요?",
             sortActionHandler: { sortMode in
-                self.sortMode = sortMode
+                self.viewModel.getMovieSortType(with: sortMode)
             }
         )
     }
@@ -36,66 +31,66 @@ final class MovieListCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.sortMode = .reservationRate
-        self.setupView()
+        configureView()
+        configureBinding()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.navigationItem.title = self.sortMode?.title
-        self.movieListCollectionView?.reloadData()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if let navigationController = self.tabBarController?.viewControllers?[safe: 0] as? UINavigationController {
-            if let movieListTableViewController = navigationController.viewControllers.first as? MovieListTableViewController {
-//                movieListTableViewController.sortMode = self.sortMode
-            }
-        }
-    }
-    
-    private func setupView() {
+
+    private func configureView() {
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         self.movieListCollectionView?.collectionViewLayout = layout
     }
-}
-
-// MARK: - UICollectionViewDelegate
-extension MovieListCollectionViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let movieDetailViewController = MovieDetailsViewController.instantiate()
-        movieDetailViewController.initMovies(with: self.viewModel.movieList?[indexPath.row])
-        self.navigationController?.pushViewController(movieDetailViewController, animated: true)
-    }
-}
-
-
-// MARK: - UICollectionViewDataSource
-extension MovieListCollectionViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.movieList?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as MovieListCollectionViewCell
+    private func configureBinding() {
         
-        guard let movieList = self.viewModel.movieList else {
-            return UICollectionViewCell()
+        let viewDidDisAppear = rx.viewDidDisappear.map { _ in () }
+        let viewDidAppear = rx.viewDidAppear.map { _ in () }
+        
+        viewDidDisAppear
+            .withLatestFrom(viewModel.movieSortType)
+            .subscribe(onNext: {
+                self.sendMovieSorType(with: $0)
+            })
+        
+        viewDidAppear
+            .subscribe(onNext: {
+                self.movieListCollectionView?.reloadData()
+            })
+        
+        viewModel.movieList
+            .observe(on: MainScheduler.instance)
+            .bind(to: movieListCollectionView.rx.items(cellIdentifier: MovieListCollectionViewCell.reusableIdentifier, cellType: MovieListCollectionViewCell.self)) { index, item, cell in
+                
+                cell.configure(model: item)
+            }
+            .disposed(by: disposeBag)
+        
+        movieListCollectionView.rx.modelSelected(Movies.self)
+            .subscribe(onNext: { movie in
+                let movieDetailViewController = MovieDetailsViewController.instantiate()
+                movieDetailViewController.viewModel = MovieDetailViewModel(movies: movie)
+                self.navigationController?.pushViewController(movieDetailViewController, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        movieListCollectionView.rx.setDelegate(self)
+                    .disposed(by: disposeBag)
+        
+        viewModel.movieSortType
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.navigationItem.title = $0.title
+            })
+    }
+    
+    private func sendMovieSorType(with movieSortType: MovieSortType) {
+        if let navigationController = self.tabBarController?.viewControllers?[safe: 0] as? UINavigationController {
+            if let movieListTableViewController = navigationController.viewControllers.first as? MovieListTableViewController {
+                movieListTableViewController.viewModel.getMovieSortType(with: movieSortType)
+            }
         }
-        let imageData = self.viewModel.imageData
-        
-        cell.configure(model: movieList[safe: indexPath.row] ?? nil, thumbnailData: imageData[safe: indexPath.row] ?? nil)
-        
-        return cell
     }
 }
 

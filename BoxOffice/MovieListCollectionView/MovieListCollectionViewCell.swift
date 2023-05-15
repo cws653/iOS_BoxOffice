@@ -29,10 +29,10 @@ class MovieListCollectionViewCell: UICollectionViewCell, Reusable {
         self.gradeImageView?.image = nil
     }
 
-    func configure(model: Movies?, thumbnailData: Data?) {
-        guard let model = model, let thumbnailData = thumbnailData else { return }
+    func configure(model: Movies?) {
+        guard let model = model, let url = URL(string: model.thumb) else { return }
         
-        self.movieImageView?.image = UIImage(data: thumbnailData)
+        self.movieImageView?.load(url: url)
         self.gradeImageView?.image = Grade(rawValue: model.grade)?.image
         
         self.movieTitleLabel?.text = model.title

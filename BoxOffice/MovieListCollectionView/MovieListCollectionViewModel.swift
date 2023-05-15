@@ -7,51 +7,35 @@
 //
 
 import Foundation
+import RxSwift
 
 final class MovieListCollectionViewModel {
+    let disposeBag = DisposeBag()
     
-    private(set) var movieList: [Movies]?
-    private(set) var imageData: [Data] = []
+    var movieSortType = BehaviorSubject<MovieSortType>(value: .reservationRate)
+    var movieList = BehaviorSubject<[Movies]>(value: [])
+    let provider = Provider()
     
-    private let dispatchGroup = DispatchGroup()
-    private let provider = Provider()
+    init() {
+        
+        movieSortType
+            .subscribe(onNext: { [weak self] in
+                self?.fetchMovieList($0)
+            })
+            .disposed(by: disposeBag)
+    }
 }
 
 extension MovieListCollectionViewModel {
-    
-    func getMoviewList(movieMode: MovieSortMode, completion: @escaping () -> Void) {
-        let endPoint = APIEndpoints.getMovieList(movieSortType: movieMode)
-        self.provider.request(with: endPoint) { result in
-            switch result {
-            case .success(let movieList):
-                self.movieList = movieList.movies
-                self.getImageDatas(from: movieList.movies) {
-                    completion()
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
+    func fetchMovieList(_ type: MovieSortType) {
+        let endPoint = APIEndpoints.getMovieList(movieSortType: type)
+        provider.reqeustRx(with: endPoint)
+            .map { $0.movies }
+            .bind(to: movieList)
+            .disposed(by: disposeBag)
     }
     
-    func getImageDatas(from movies: [Movies], completion:@escaping () -> Void) {
-        movies.forEach { movie in
-            dispatchGroup.enter()
-            guard let imageURL = URL(string: movie.thumb) else {
-                return
-            }
-            self.provider.request(imageURL) { [weak self] result in
-                switch result {
-                case .success(let data):
-                    self?.imageData.append(data)
-                    self?.dispatchGroup.leave()
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        dispatchGroup.notify(queue: .main) {
-            completion()
-        }
+    func getMovieSortType(with movieSortType: MovieSortType) {
+        self.movieSortType.onNext(movieSortType)
     }
 }

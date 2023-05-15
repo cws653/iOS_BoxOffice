@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum MovieSortMode: Int {
+enum MovieSortType: Int {
     case reservationRate = 0
     case quration = 1
     case open = 2
 }
 
-extension MovieSortMode {
+extension MovieSortType {
     
     var title: String {
         switch self {

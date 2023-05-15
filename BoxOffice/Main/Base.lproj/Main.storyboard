@@ -103,7 +103,7 @@
                     <navigationItem key="navigationItem" title="예매율" id="YPp-FL-ThR">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="ic_settings" id="b08-dd-L5b">
                             <connections>
-                                <action selector="navigationItemAction:" destination="BYZ-38-t0r" id="O1p-br-142"/>
+                                <action selector="navigationItemAction:" destination="BYZ-38-t0r" id="kGQ-Sh-SCt"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -452,10 +452,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="4WY-yK-8zC" id="Qd1-gN-Ay6"/>
-                                    <outlet property="delegate" destination="4WY-yK-8zC" id="cNH-I3-2hv"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2um-47-d9X"/>
@@ -734,10 +730,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="lE1-N5-emj" id="evg-GD-X5b"/>
-                                    <outlet property="delegate" destination="lE1-N5-emj" id="GQD-3I-DYs"/>
-                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="bjO-Tl-MIX"/>
