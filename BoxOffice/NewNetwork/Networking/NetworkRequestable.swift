@@ -18,6 +18,8 @@ protocol NetworkRequestable {
     var parameters: Encodable? { get }
     /// Request Headers
     var headers: HTTPHeaders { get }
+    /// Request Encoding
+    var encoding: ParameterEncoding { get }
     
     /// Endpoint
     /// -  WrongEndPoint Error를 발생시키기 위해 함수로 작성
@@ -56,6 +58,10 @@ extension NetworkRequestable {
     
     var headers: HTTPHeaders {
         .default
+    }
+    
+    var encoding: ParameterEncoding {
+        URLEncoding.default
     }
 }
 

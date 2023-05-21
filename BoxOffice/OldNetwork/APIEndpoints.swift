@@ -26,7 +26,7 @@ struct APIEndpoints {
     static func getCommentList(movieID: String) -> EndPoint<CommentList> {
         return EndPoint(path: "comments",
                         method: .get,
-                        queryParameters: GetMovieComments(movieID: movieID)
+                        queryParameters: GetMovieCommentsRequest(movieID: movieID)
                         )
     }
     

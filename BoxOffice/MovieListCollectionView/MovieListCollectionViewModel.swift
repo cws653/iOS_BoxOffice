@@ -8,28 +8,26 @@
 
 import Foundation
 
-final class MovieListCollectionViewModel {
-    
-    private(set) var movieList: [Movies]?
-    private(set) var imageData: [Data] = []
+final class MovieListCollectionViewModel: MovieListViewModelProtocol {
+    var movieList: [Movies] = []
+    var imageData: [Data] = []
     
     private let dispatchGroup = DispatchGroup()
     private let provider = Provider()
+    private let service: MovieService
+    
+    init(service: MovieService) {
+        self.service = service
+    }
 }
 
 extension MovieListCollectionViewModel {
-    
-    func getMoviewList(movieMode: MovieSortMode, completion: @escaping () -> Void) {
-        let endPoint = APIEndpoints.getMovieList(movieSortType: movieMode)
-        self.provider.request(with: endPoint) { result in
-            switch result {
-            case .success(let movieList):
-                self.movieList = movieList.movies
-                self.getImageDatas(from: movieList.movies) {
-                    completion()
-                }
-            case .failure(let error):
-                print(error)
+    func getMovieList(movieOrderType: Int, completion: @escaping () -> Void) {
+        self.service.getMovieList(MovieList.self, MovieAPI.getMovieList(GetMovieListRequest(orderType: movieOrderType))) { result in
+            guard let result = result else { return }
+            self.movieList = result.movies
+            self.getImageDatas(from: result.movies) {
+                completion()
             }
         }
     }

@@ -8,38 +8,54 @@
 
 import Foundation
 
-class MovieDetailViewModel {
+protocol MovieDetailViewModelProtocol {
+    var detailContents: DetailContents? { get set }
+    var imageData: Data? { get set }
+    var comments: [Comment]? { get set }
+    var movies: Movies { get set }
+    
+    func getMovieInfo(completion:@escaping () -> Void)
+    func getImageData(from movie: Movies, completion:@escaping () -> Void)
+    func getComments(completion:@escaping () -> Void)
+}
 
-    private(set) var detailContents: DetailContents?
-    private(set) var imageData: Data?
-    private(set) var comments: [Comment]?
-    private(set) var movies: Movies?
+final class MovieDetailViewModel: MovieDetailViewModelProtocol {
+    
+    var detailContents: DetailContents?
+    var imageData: Data?
+    var comments: [Comment]?
+    var movies: Movies
     
     private let dispatchGroup = DispatchGroup()
     private let provider = Provider()
+    private let service: MovieService
+    
+    
+    init(service: MovieService, movies: Movies) {
+        self.service = service
+        self.movies = movies
+    }
 }
 
 extension MovieDetailViewModel {
-    func setMovies(with movies: Movies) {
-        self.movies = movies
-    }
-    
-    func getMovieInfo(movie: Movies, completion:@escaping () -> Void) {
-        let movieID = movie.id
-        let endPoint = APIEndpoints.getMovieDetails(movieID: movieID)
-        self.provider.request(with: endPoint) { result in
-            switch result {
-            case .success(let detailContents):
-                self.detailContents = detailContents
-                self.getImageData(from: movie) {
-                    completion()
-                }
-            case .failure(let error):
-                print(error)
+    func getMovieInfo(completion: @escaping () -> Void) {
+        self.service.getMovieDetail(DetailContents.self, MovieAPI.getMovieDetail(GetMovieDetailRequest(id: self.movies.id))) { result in
+            guard let result = result else { return }
+            self.detailContents = result
+            self.getImageData(from: self.movies) {
+                completion()
             }
         }
         
-        self.getComments(movieID: movie.id) {
+        self.getComments {
+            completion()
+        }
+    }
+    
+    func getComments(completion: @escaping () -> Void) {
+        self.service.getComments(CommentList.self, MovieAPI.getCommentList(GetMovieCommentsRequest(movieID: self.movies.id))) { result in
+            guard let result = result else { return }
+            self.comments = result.comments
             completion()
         }
     }
@@ -53,19 +69,6 @@ extension MovieDetailViewModel {
             switch result {
             case .success(let data):
                 self.imageData = data
-                completion()
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func getComments(movieID: String, completion:@escaping () -> Void) {
-        let endPoint = APIEndpoints.getCommentList(movieID: movieID)
-        self.provider.request(with: endPoint) { result in
-            switch result {
-            case .success(let commentList):
-                self.comments = commentList.comments
                 completion()
             case .failure(let error):
                 print(error)

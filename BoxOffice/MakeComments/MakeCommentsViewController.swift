@@ -27,7 +27,8 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
         let backButton = UIBarButtonItem.init(title: "취소", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
         return backButton
     }
-    private var viewModel = MakeCommentViewModel()
+    
+    var viewModel: MakeCommentViewModel?
     
     @IBOutlet private weak var titleLabel: UILabel?
     @IBOutlet private weak var gradeImage: UIImageView?
@@ -44,17 +45,12 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
         setupView()
     }
     
-    func initialModel(movies: Movies?) {
-        guard let movies = movies else { return }
-        self.viewModel.initMovies(movies: movies)
-    }
-    
     func setupView() {
         self.title = "한줄평 작성"
         self.navigationItem.rightBarButtonItem = self.finishButton
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = self.backButton
         
-        guard let movie = self.viewModel.movies else { return }
+        guard let movie = self.viewModel?.movies else { return }
         self.titleLabel?.text = movie.title
         self.gradeImage?.image = Grade(rawValue: movie.grade)?.image
         self.gradeSlider?.value = Float(movie.userRating)
@@ -70,12 +66,12 @@ final class MakeCommentsViewController: UIViewController, StoryboardBased {
             self.userInfo.set(userIdTextField?.text, forKey: "userId")
             
             guard let writer = self.userIdTextField?.text else { return }
-            guard let movieId = self.viewModel.movies?.id else { return }
+            guard let movieId = self.viewModel?.movies.id else { return }
             guard let contents = self.contentsTextView?.text else { return }
             let rating = Double(self.gradeSlider?.value ?? 0.0)
             
             let postCommentRequest = PostMovieCommentRequest(rating: rating, writer: writer, movieID: movieId, contents: contents)
-            self.viewModel.postComment(request: postCommentRequest) { [weak self] in
+            self.viewModel?.postComment(request: postCommentRequest) { [weak self] in
                 guard let self = self else { return }
                 DispatchQueue.main.async {
                     self.delegate?.makeComment()

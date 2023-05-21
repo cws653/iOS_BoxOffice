@@ -19,6 +19,12 @@ extension Encodable {
         } catch {
             return [:]
         }
+        
+//        if let bodyParameters = try bodyParameters?.toDictionary() {
+//            if !bodyParameters.isEmpty {
+//                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: bodyParameters)
+//            }
+//        }
     }
     
     var multiPartRequestable: [String: Data] {

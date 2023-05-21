@@ -10,10 +10,10 @@ import UIKit
 
 final class MovieListCollectionViewController: UIViewController {
     
-    private var viewModel = MovieListCollectionViewModel()
+    private var viewModel = MovieListTableViewModel(service: MovieService(Networking()))
     var sortMode: MovieSortMode? {
         didSet {
-            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
+            self.viewModel.getMovieList(movieOrderType: (self.sortMode ?? .reservationRate).rawValue) { [weak self] in
                 guard let self = self else { return }
                 self.navigationItem.title = self.sortMode?.title
                 self.movieListCollectionView?.reloadData()
@@ -69,7 +69,7 @@ final class MovieListCollectionViewController: UIViewController {
 extension MovieListCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movieDetailViewController = MovieDetailsViewController.instantiate()
-        movieDetailViewController.initMovies(with: self.viewModel.movieList?[indexPath.row])
+        movieDetailViewController.viewModel = MovieDetailViewModel(service: MovieService(Networking()), movies: self.viewModel.movieList[indexPath.row])
         self.navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }
@@ -82,15 +82,12 @@ extension MovieListCollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.movieList?.count ?? 0
+        return self.viewModel.movieList.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(for: indexPath) as MovieListCollectionViewCell
-        
-        guard let movieList = self.viewModel.movieList else {
-            return UICollectionViewCell()
-        }
+        let movieList = self.viewModel.movieList
         let imageData = self.viewModel.imageData
         
         cell.configure(model: movieList[safe: indexPath.row] ?? nil, thumbnailData: imageData[safe: indexPath.row] ?? nil)

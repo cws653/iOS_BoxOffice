@@ -283,8 +283,7 @@
 		9D6BD0092A19EB4D00FB91A1 /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				9D6BCFF92A19E0B500FB91A1 /* MovieAPI.swift */,
-				9D6BCFF72A19E0B000FB91A1 /* MovieService.swift */,
+				9D6BD00D2A19ECD400FB91A1 /* Movie */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -312,6 +311,15 @@
 				9D6BCFF32A19E09100FB91A1 /* MovieRepositoryLogic.swift */,
 			);
 			path = Repository;
+			sourceTree = "<group>";
+		};
+		9D6BD00D2A19ECD400FB91A1 /* Movie */ = {
+			isa = PBXGroup;
+			children = (
+				9D6BCFF92A19E0B500FB91A1 /* MovieAPI.swift */,
+				9D6BCFF72A19E0B000FB91A1 /* MovieService.swift */,
+			);
+			path = Movie;
 			sourceTree = "<group>";
 		};
 		9D7F671D250C8A8C00D542F9 /* OldNetwork */ = {
@@ -392,10 +400,10 @@
 			children = (
 				9D6BD00C2A19EBEC00FB91A1 /* Repository */,
 				9D6BD00B2A19EB7600FB91A1 /* JSONResponseDecoder */,
-				9D6BD00A2A19EB5900FB91A1 /* Networking */,
 				9D6BD0092A19EB4D00FB91A1 /* Service */,
-				9D6BD0082A19EAE900FB91A1 /* ResponseModel */,
+				9D6BD00A2A19EB5900FB91A1 /* Networking */,
 				9D6BD0072A19EACF00FB91A1 /* RequestModel */,
+				9D6BD0082A19EAE900FB91A1 /* ResponseModel */,
 			);
 			path = NewNetwork;
 			sourceTree = "<group>";

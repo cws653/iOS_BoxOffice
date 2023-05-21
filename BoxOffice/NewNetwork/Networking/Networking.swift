@@ -38,6 +38,7 @@ final class Networking: NetworkingProtocol {
                 endpoint,
                 method: requestable.method,
                 parameters: parameters,
+                encoding: requestable.encoding,
                 headers: requestable.headers
             ).response { response in
                 if let error = response.error {
@@ -49,7 +50,7 @@ final class Networking: NetworkingProtocol {
                 }
                 
                 self.decode(model, data, { result in
-                    DispatchQueue.main.async {
+                     DispatchQueue.main.async {
                         switch result {
                         case .success(let success):
                             completion(.success(success))
@@ -95,6 +96,7 @@ final class Networking: NetworkingProtocol {
                 $0.timeoutInterval = 10
             }
             .response { response in
+                
                 if let error = response.error {
                     completion(.failure(NetworkingError.response(error)))
                 }
@@ -136,6 +138,30 @@ extension Networking {
         default:
             debugPrint("** UnhandledReuqestError occurs")
         }
+    }
+    
+    private func checkError(with data: Data?, _ response: URLResponse?, _ error: Error?, completion: @escaping (Result<Data, Error>) -> ()) {
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        guard let response = response as? HTTPURLResponse else {
+            completion(.failure(NetworkError.unknownError))
+            return
+        }
+        
+        guard (200...299).contains(response.statusCode) else {
+            completion(.failure(NetworkError.serverError(ServerError(rawValue: response.statusCode) ?? .unkonown)))
+            return
+        }
+        
+        guard let data = data else {
+            completion(.failure(NetworkError.emptyData))
+            return
+        }
+        
+        completion(.success((data)))
     }
     
     private func decode<T: Decodable>(_: T.Type ,_ data: Data, _ completion: @escaping ((Result<T?, Error>) -> ()))  {

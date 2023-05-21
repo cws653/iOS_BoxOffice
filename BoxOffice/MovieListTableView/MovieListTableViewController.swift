@@ -10,7 +10,7 @@ import UIKit
 
 final class MovieListTableViewController: UIViewController {
     
-    private var viewModel = MovieListTableViewModel(service: MovieService(Networking()))
+    private var viewModel: MovieListViewModelProtocol = MovieListTableViewModel(service: MovieService(Networking()))
     var sortMode: MovieSortMode? {
         didSet {
             self.viewModel.getMovieList(movieOrderType: (self.sortMode ?? .reservationRate).rawValue) { [weak self] in
@@ -18,11 +18,6 @@ final class MovieListTableViewController: UIViewController {
                 self.navigationItem.title = self.sortMode?.title
                 self.movieListTableView?.reloadData()
             }
-//            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
-//                guard let self = self else { return }
-//                self.navigationItem.title = self.sortMode?.title
-//                self.movieListTableView?.reloadData()
-//            }
         }
     }
     
@@ -66,7 +61,7 @@ final class MovieListTableViewController: UIViewController {
 extension MovieListTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movieDetailViewController = MovieDetailsViewController.instantiate()
-        movieDetailViewController.initMovies(with: self.viewModel.movieList?[indexPath.row])
+        movieDetailViewController.viewModel = MovieDetailViewModel(service: MovieService(Networking()), movies: self.viewModel.movieList[indexPath.row])
         self.navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }
@@ -78,15 +73,13 @@ extension MovieListTableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.movieList?.count ?? 0
+        return self.viewModel.movieList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(for: indexPath) as MovieListTableViewCell
-        guard let movieList = self.viewModel.movieList else {
-            return UITableViewCell()
-        }
+        let movieList = self.viewModel.movieList
         let imageData = self.viewModel.imageData
         
         cell.configure(model: movieList[safe: indexPath.row], thumbnailData: imageData[safe: indexPath.row])

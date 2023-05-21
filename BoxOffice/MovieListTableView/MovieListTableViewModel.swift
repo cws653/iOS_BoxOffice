@@ -8,14 +8,19 @@
 
 import Foundation
 
-final class MovieListTableViewModel {
-    
-    private(set) var movieList: [Movies]?
-    private(set) var imageData: [Data] = []
+protocol MovieListViewModelProtocol {
+    var movieList: [Movies] { get set }
+    var imageData: [Data] { get set }
+    func getMovieList(movieOrderType: Int, completion: @escaping () -> Void)
+    func getImageDatas(from movies: [Movies], completion:@escaping () -> Void)
+}
+
+final class MovieListTableViewModel: MovieListViewModelProtocol {
+    var movieList: [Movies] = []
+    var imageData: [Data] = []
     
     private let dispatchGroup = DispatchGroup()
     private let provider = Provider()
-    
     private let service: MovieService
     
     init(service: MovieService) {
@@ -24,18 +29,12 @@ final class MovieListTableViewModel {
 }
 
 extension MovieListTableViewModel {
-    
-    func getMoviewList(movieMode: MovieSortMode, completion: @escaping () -> Void) {
-        let endPoint = APIEndpoints.getMovieList(movieSortType: movieMode)
-        self.provider.request(with: endPoint) { result in
-            switch result {
-            case .success(let movieList):
-                self.movieList = movieList.movies
-                self.getImageDatas(from: movieList.movies) {
-                    completion()
-                }
-            case .failure(let error):
-                print(error)
+    func getMovieList(movieOrderType: Int, completion: @escaping () -> Void) {
+        self.service.getMovieList(MovieList.self, MovieAPI.getMovieList(GetMovieListRequest(orderType: movieOrderType))) { result in
+            guard let result = result else { return }
+            self.movieList = result.movies
+            self.getImageDatas(from: result.movies) {
+                completion()
             }
         }
     }
@@ -46,6 +45,7 @@ extension MovieListTableViewModel {
             guard let imageURL = URL(string: movie.thumb) else {
                 return
             }
+            
             self.provider.request(imageURL) { [weak self] result in
                 switch result {
                 case .success(let data):
@@ -58,18 +58,6 @@ extension MovieListTableViewModel {
         }
         dispatchGroup.notify(queue: .main) {
             completion()
-        }
-    }
-}
-
-extension MovieListTableViewModel {
-    func getMovieList(movieOrderType: Int, completion: @escaping () -> Void) {
-        self.service.getMovieList(MovieAPI.getMovieList(GetMovieListRequest(orderType: movieOrderType))) { result in
-            guard let result = result else { return }
-            self.movieList = result.movies
-            self.getImageDatas(from: result.movies) {
-                completion()
-            }
         }
     }
 }

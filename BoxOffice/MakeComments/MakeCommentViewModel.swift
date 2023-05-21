@@ -8,27 +8,29 @@
 
 import Foundation
 
-class MakeCommentViewModel {
+protocol makeCommentViewModelProtocol {
+    var movies: Movies { get set }
+    func postComment(request: PostMovieCommentRequest, completion: @escaping () -> Void)
+}
+
+class MakeCommentViewModel: makeCommentViewModelProtocol {
     
-    private(set) var movies: Movies?
+    var movies: Movies
+    
     private let provider = Provider()
+    private let service: MovieService
+    
+    init(movies: Movies, service: MovieService) {
+        self.movies = movies
+        self.service = service
+    }
 }
 
 extension MakeCommentViewModel {
-    
-    func initMovies(movies: Movies) {
-        self.movies = movies
-    }
-    
     func postComment(request: PostMovieCommentRequest, completion: @escaping () -> Void) {
-        let endPoint = APIEndpoints.postComment(request: request)
-        self.provider.request(with: endPoint) { result in
-            switch result {
-            case .success(let comment):
-                completion()
-            case .failure(let error):
-                print(error)
-            }
+        self.service.postComments(Comment.self, MovieAPI.postComment(request)) { result in
+            guard let result = result else { return }
+            completion()
         }
     }
 }
