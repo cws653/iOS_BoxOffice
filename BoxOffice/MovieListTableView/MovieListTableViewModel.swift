@@ -15,6 +15,12 @@ final class MovieListTableViewModel {
     
     private let dispatchGroup = DispatchGroup()
     private let provider = Provider()
+    
+    private let service: MovieService
+    
+    init(service: MovieService) {
+        self.service = service
+    }
 }
 
 extension MovieListTableViewModel {
@@ -52,6 +58,18 @@ extension MovieListTableViewModel {
         }
         dispatchGroup.notify(queue: .main) {
             completion()
+        }
+    }
+}
+
+extension MovieListTableViewModel {
+    func getMovieList(movieOrderType: Int, completion: @escaping () -> Void) {
+        self.service.getMovieList(MovieAPI.getMovieList(GetMovieListRequest(orderType: movieOrderType))) { result in
+            guard let result = result else { return }
+            self.movieList = result.movies
+            self.getImageDatas(from: result.movies) {
+                completion()
+            }
         }
     }
 }

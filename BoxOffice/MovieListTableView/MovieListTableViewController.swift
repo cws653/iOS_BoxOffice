@@ -10,14 +10,19 @@ import UIKit
 
 final class MovieListTableViewController: UIViewController {
     
-    private var viewModel = MovieListTableViewModel()
+    private var viewModel = MovieListTableViewModel(service: MovieService(Networking()))
     var sortMode: MovieSortMode? {
         didSet {
-            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
+            self.viewModel.getMovieList(movieOrderType: (self.sortMode ?? .reservationRate).rawValue) { [weak self] in
                 guard let self = self else { return }
                 self.navigationItem.title = self.sortMode?.title
                 self.movieListTableView?.reloadData()
             }
+//            self.viewModel.getMoviewList(movieMode: self.sortMode ?? .reservationRate) { [weak self] in
+//                guard let self = self else { return }
+//                self.navigationItem.title = self.sortMode?.title
+//                self.movieListTableView?.reloadData()
+//            }
         }
     }
     
