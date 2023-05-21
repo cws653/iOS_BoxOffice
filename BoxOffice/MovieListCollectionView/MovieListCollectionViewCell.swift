@@ -30,11 +30,9 @@ class MovieListCollectionViewCell: UICollectionViewCell, Reusable {
     }
 
     func configure(model: Movies?, thumbnailData: Data?) {
-        guard let model = model, let thumbnailData = thumbnailData else { return }
-        
-        self.movieImageView?.image = UIImage(data: thumbnailData)
+        guard let model = model else { return }
+        self.movieImageView?.setImage(with: model.thumb)
         self.gradeImageView?.image = Grade(rawValue: model.grade)?.image
-        
         self.movieTitleLabel?.text = model.title
         self.gradeAndRateLabel?.text = String(model.reservationGrade) + "위" + "(" + String(model.userRating) + ")" + " / " + String(model.reservationRate) + "%"
         self.openDateLabel?.text = "개봉일: " + String(model.date)

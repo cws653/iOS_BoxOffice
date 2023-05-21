@@ -56,6 +56,7 @@
 		9D6BD0022A19E0CE00FB91A1 /* CommentListResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6BD0012A19E0CE00FB91A1 /* CommentListResponseModel.swift */; };
 		9D6BD0042A19E10900FB91A1 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6BD0032A19E10900FB91A1 /* Encodable+.swift */; };
 		9D6BD0062A19E10D00FB91A1 /* HttpHeader+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6BD0052A19E10D00FB91A1 /* HttpHeader+.swift */; };
+		9D99D7FA2A1A56A60054673B /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D99D7F92A1A56A60054673B /* UIView+.swift */; };
 		9DB6887F24FA00C100B8EA2B /* MovieListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB6887E24FA00C100B8EA2B /* MovieListTableViewCell.swift */; };
 		9DC431FB29C86E9F00C1E8E6 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC431FA29C86E9F00C1E8E6 /* Array+Extension.swift */; };
 		9DC431FD29C87E2600C1E8E6 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC431FC29C87E2600C1E8E6 /* UIViewController+Extension.swift */; };
@@ -122,6 +123,7 @@
 		9D6BD0012A19E0CE00FB91A1 /* CommentListResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentListResponseModel.swift; sourceTree = "<group>"; };
 		9D6BD0032A19E10900FB91A1 /* Encodable+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
 		9D6BD0052A19E10D00FB91A1 /* HttpHeader+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpHeader+.swift"; sourceTree = "<group>"; };
+		9D99D7F92A1A56A60054673B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		9DB6887E24FA00C100B8EA2B /* MovieListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListTableViewCell.swift; sourceTree = "<group>"; };
 		9DC431FA29C86E9F00C1E8E6 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		9DC431FC29C87E2600C1E8E6 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 			children = (
 				9D6BD0032A19E10900FB91A1 /* Encodable+.swift */,
 				9D6BD0052A19E10D00FB91A1 /* HttpHeader+.swift */,
+				9D99D7F92A1A56A60054673B /* UIView+.swift */,
 				9DC431FA29C86E9F00C1E8E6 /* Array+Extension.swift */,
 				9DC431FC29C87E2600C1E8E6 /* UIViewController+Extension.swift */,
 				9D0C349729F1DE6500BFF493 /* Encodable+Extension.swift */,
@@ -582,6 +585,7 @@
 				9D0C349829F1DE6500BFF493 /* Encodable+Extension.swift in Sources */,
 				9D0DCF7729CC809C006A2F6B /* DetailMakeCommentCell.swift in Sources */,
 				9D02ECD429F3CBE400356DE2 /* MovieRequest.swift in Sources */,
+				9D99D7FA2A1A56A60054673B /* UIView+.swift in Sources */,
 				9D6BCFFE2A19E0C500FB91A1 /* MovieListResponseModel.swift in Sources */,
 				9D0FEF802515EF2900E9CC5E /* DetailCastCell.swift in Sources */,
 				9D030443250CBDEF0095E4F2 /* CommentListResponse.swift in Sources */,

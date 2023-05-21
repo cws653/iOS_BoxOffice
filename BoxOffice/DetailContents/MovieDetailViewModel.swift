@@ -10,24 +10,22 @@ import Foundation
 
 protocol MovieDetailViewModelProtocol {
     var detailContents: DetailContents? { get set }
-    var imageData: Data? { get set }
+    var thumbImageString: String? { get set }
     var comments: [Comment]? { get set }
     var movies: Movies { get set }
     
     func getMovieInfo(completion:@escaping () -> Void)
-    func getImageData(from movie: Movies, completion:@escaping () -> Void)
     func getComments(completion:@escaping () -> Void)
 }
 
 final class MovieDetailViewModel: MovieDetailViewModelProtocol {
     
     var detailContents: DetailContents?
-    var imageData: Data?
+    var thumbImageString: String?
     var comments: [Comment]?
     var movies: Movies
     
     private let dispatchGroup = DispatchGroup()
-    private let provider = Provider()
     private let service: MovieService
     
     
@@ -39,15 +37,20 @@ final class MovieDetailViewModel: MovieDetailViewModelProtocol {
 
 extension MovieDetailViewModel {
     func getMovieInfo(completion: @escaping () -> Void) {
+        dispatchGroup.enter()
         self.service.getMovieDetail(DetailContents.self, MovieAPI.getMovieDetail(GetMovieDetailRequest(id: self.movies.id))) { result in
             guard let result = result else { return }
             self.detailContents = result
-            self.getImageData(from: self.movies) {
-                completion()
-            }
+            self.thumbImageString = self.movies.thumb
+            self.dispatchGroup.leave()
         }
         
+        dispatchGroup.enter()
         self.getComments {
+            self.dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
             completion()
         }
     }
@@ -57,22 +60,6 @@ extension MovieDetailViewModel {
             guard let result = result else { return }
             self.comments = result.comments
             completion()
-        }
-    }
-    
-    func getImageData(from movie: Movies, completion:@escaping () -> Void) {
-        guard let imageURL = URL(string: movie.thumb) else {
-            return
-        }
-        
-        self.provider.request(imageURL) { result in
-            switch result {
-            case .success(let data):
-                self.imageData = data
-                completion()
-            case .failure(let error):
-                print(error)
-            }
         }
     }
 }

@@ -66,8 +66,8 @@ extension MovieDetailsViewController: UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(for: indexPath) as DetailPosterCell
             cell.delegate = self
-            guard let model = self.viewModel?.detailContents, let imageData = self.viewModel?.imageData else { return UITableViewCell() }
-            cell.configure(model: model, imageData: imageData)
+            guard let model = self.viewModel?.detailContents, let thumbImageString = self.viewModel?.thumbImageString else { return UITableViewCell() }
+            cell.configure(model: model, thumbImageString: thumbImageString)
             return cell
 
         } else if indexPath.section == 1 {
