@@ -38,13 +38,13 @@ final class MovieListTableViewController: UIViewController {
         
         let viewDidDisAppear = rx.viewDidDisappear.map { _ in () }
         let viewDidAppear = rx.viewDidAppear.map { _ in () }
-        
+
         viewDidDisAppear
             .withLatestFrom(viewModel.movieSortType)
             .subscribe(onNext: {
                 self.sendMovieSorType(with: $0)
             })
-        
+
         viewDidAppear
             .subscribe(onNext: {
                 self.movieListTableView?.reloadData()
@@ -61,7 +61,7 @@ final class MovieListTableViewController: UIViewController {
         movieListTableView.rx.modelSelected(Movies.self)
             .subscribe(onNext: { movie in
                 let movieDetailViewController = MovieDetailsViewController.instantiate()
-                movieDetailViewController.viewModel = MovieDetailViewModel(movies: movie)
+                movieDetailViewController.viewModel.setMovies(with: movie)
                 self.navigationController?.pushViewController(movieDetailViewController, animated: true)
             })
             .disposed(by: disposeBag)

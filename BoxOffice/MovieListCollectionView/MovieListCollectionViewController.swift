@@ -53,7 +53,7 @@ final class MovieListCollectionViewController: UIViewController {
             .subscribe(onNext: {
                 self.sendMovieSorType(with: $0)
             })
-        
+
         viewDidAppear
             .subscribe(onNext: {
                 self.movieListCollectionView?.reloadData()
@@ -70,7 +70,7 @@ final class MovieListCollectionViewController: UIViewController {
         movieListCollectionView.rx.modelSelected(Movies.self)
             .subscribe(onNext: { movie in
                 let movieDetailViewController = MovieDetailsViewController.instantiate()
-                movieDetailViewController.viewModel = MovieDetailViewModel(movies: movie)
+                movieDetailViewController.viewModel.setMovies(with: movie)
                 self.navigationController?.pushViewController(movieDetailViewController, animated: true)
             })
             .disposed(by: disposeBag)
