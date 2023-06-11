@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol MovieServiceLogic {
     
@@ -43,6 +44,72 @@ final class MovieService {
 }
 
 extension MovieService: MovieServiceLogic {
+    
+    func getMovieListCB<T: Decodable>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<T, Error> {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func getMovieDetailCB<T: Decodable>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<T, Error> {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func getCommentsCB<T: Decodable>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<T, Error> {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func postCommentsCB<T: Decodable>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<T, Error> {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    
     
     func getMovieList<T:Decodable>(
         _ model: T.Type,

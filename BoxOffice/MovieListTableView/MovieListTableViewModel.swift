@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
 
 protocol MovieListViewModelProtocol {
     var movieList: [Movies] { get set }
@@ -17,6 +19,9 @@ protocol MovieListViewModelProtocol {
 final class MovieListTableViewModel: MovieListViewModelProtocol {
     var movieList: [Movies] = []
     var imageData: [Data] = []
+    
+    var testMovieList = CurrentValueSubject<[Movies], Never>([])
+    private var cancellables = Set<AnyCancellable>()
     
     private let service: MovieService
     
@@ -32,5 +37,12 @@ extension MovieListTableViewModel {
             self.movieList = result.movies
             completion()
         }
+    }
+    
+    func testGetMovieList(movieOrderType: Int) {
+        self.service.getMovieListCB(MovieList.self, MovieAPI.getMovieList(GetMovieListRequest(orderType: movieOrderType)))
+            .map { $0.movies }
+            .assign(to: \.movies, on: self.testMovieList)
+            .store(in: &cancellables)
     }
 }
