@@ -33,6 +33,7 @@ __※ 현재 부스트코스 BoxOffice 서비스 중단으로 서버 통신 불�
 + iOS 네트워크 통신에 대하여 공부하였고, 네트워크 통신을 위한 API들에 대하여 파악할 수 있었다. → URLSession, Alamofire, Moya
 + 각 라이브러리의 특성을 파악하면서 네트워크 통신을 위하여 역할을 분리해놓은 것을 파악하였고, 네트워크 레이어를 분리하는 작업을 해보았다.
 + 개념 공부 내용 : https://kurediary.tistory.com/47
++ 기존 네트워크 레이어 개선 : 프로토콜을 활용하여 DIP를 구현하여 역할별 Layer 구분을 통해 테스터블하고 재활용성 높게 개선 (Service, Networking, Endpoint 분리)
 
 ## step4 : Coordinator 적용
 + 뷰컨트롤러 내부에서 화면 전환과 관련된 로직을 구현하다 보니 뷰컨트롤러의 역할의 커짐에 따라 이를 Coordinator 클래스를 만들어서 역할 분배하였다.
