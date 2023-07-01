@@ -21,6 +21,7 @@ final class MovieListTableViewModel: MovieListViewModelProtocol {
     var imageData: [Data] = []
     
     var testMovieList = CurrentValueSubject<[Movies], Never>([])
+    @Published test: [Movie] = []
     private var cancellables = Set<AnyCancellable>()
     
     private let service: MovieService
@@ -45,4 +46,36 @@ extension MovieListTableViewModel {
             .assign(to: \.movies, on: self.testMovieList)
             .store(in: &cancellables)
     }
+    
+    
+worker: movielsitworkerprotocol
+    
+    init() {
+        worker.test.subscribe { value in
+            // 어떻게 변경된값을 처리할것인지
+            presenter.showMovieList(value)
+        }
+    }
+    
+    func onViewDidload() {
+        worker.testGetMovieList()
+    }
+    
 }
+
+movielsitworkerprotocol {
+    @Published test: [Movie] { get }
+}
+
+worker: movielsitworkerprotocol {
+    
+    func testGetMovieList(movieOrderType: Int) {
+        self.service.getMovieListCB(MovieList.self, MovieAPI.getMovieList(GetMovieListRequest(orderType: movieOrderType)))
+            .map { $0.movies }
+            .assign(to: \.movies, on: self.test)
+            .store(in: &cancellables)
+    }
+}
+
+//struct viewmodel {
+//}

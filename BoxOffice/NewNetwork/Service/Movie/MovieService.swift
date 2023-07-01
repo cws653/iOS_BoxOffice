@@ -12,26 +12,26 @@ protocol MovieServiceLogic {
     
     func getMovieList<T: Decodable>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
+        _ requestable: NetworkRequestable)
+        -> AnyPublisher<T, Error>
     )
     
     func getMovieDetail<T: Decodable>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
+        _ requestable: NetworkRequestable)
+        -> AnyPublisher<T, Error>
     )
     
     func getComments<T: Decodable>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
+        _ requestable: NetworkRequestable)
+        -> AnyPublisher<T, Error>
     )
     
     func postComments<T: Decodable>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
+        _ requestable: NetworkRequestable)
+        -> AnyPublisher<T, Error>
     )
 }
 
@@ -45,7 +45,7 @@ final class MovieService {
 
 extension MovieService: MovieServiceLogic {
     
-    func getMovieListCB<T: Decodable>(
+    func getMovieList<T: Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable
     ) -> AnyPublisher<T, Error> {
@@ -59,115 +59,53 @@ extension MovieService: MovieServiceLogic {
                 }
             }
         }.eraseToAnyPublisher()
-    }
-    
-    func getMovieDetailCB<T: Decodable>(
-        _ model: T.Type,
-        _ requestable: NetworkRequestable
-    ) -> AnyPublisher<T, Error> {
-        return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
-                switch result {
-                case .success(let success):
-                    promise(.success(success))
-                case .failure(let error):
-                    promise(.failure(error))
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
-    func getCommentsCB<T: Decodable>(
-        _ model: T.Type,
-        _ requestable: NetworkRequestable
-    ) -> AnyPublisher<T, Error> {
-        return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
-                switch result {
-                case .success(let success):
-                    promise(.success(success))
-                case .failure(let error):
-                    promise(.failure(error))
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
-    func postCommentsCB<T: Decodable>(
-        _ model: T.Type,
-        _ requestable: NetworkRequestable
-    ) -> AnyPublisher<T, Error> {
-        return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
-                switch result {
-                case .success(let success):
-                    promise(.success(success))
-                case .failure(let error):
-                    promise(.failure(error))
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
-    
-    
-    func getMovieList<T:Decodable>(
-        _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
-    ) {
-        networking.request(T.self, requestable) { result in
-            switch result {
-            case .success(let success):
-                completion(success)
-            case .failure:
-                completion(nil)
-            }
-        }
     }
     
     func getMovieDetail<T: Decodable>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
-    ) {
-        networking.request(T.self, requestable) { result in
-            switch result {
-            case .success(let success):
-                completion(success)
-            case .failure:
-                completion(nil)
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<T, Error> {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
             }
-        }
+        }.eraseToAnyPublisher()
     }
     
     func getComments<T: Decodable>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
-    ) {
-        networking.request(T.self, requestable) { result in
-            switch result {
-            case .success(let success):
-                completion(success)
-            case .failure:
-                completion(nil)
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<T, Error> {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
             }
-        }
+        }.eraseToAnyPublisher()
     }
     
     func postComments<T: Decodable>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable,
-        _ completion: @escaping ((T?) -> ())
-    ) {
-        networking.request(T.self, requestable) { result in
-            switch result {
-            case .success(let success):
-                completion(success)
-            case .failure:
-                completion(nil)
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<T, Error> {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
             }
-        }
+        }.eraseToAnyPublisher()
     }
 }
